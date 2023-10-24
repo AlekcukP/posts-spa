@@ -10,8 +10,8 @@ import List from '@mui/material/List';
 
 const Tab = ({icon: Icon, name, to}) => {
     return (
-        <NavLink to={to} className='no-underline [&.active]:bg-gray-200' style={{color: 'rgba(0, 0, 0, 0.87)'}}>
-            <ListItemButton className='active [&.active]:bg-gray-200'>
+        <NavLink to={to} className='group no-underline text-gray-600'>
+            <ListItemButton className='group-[.active]:bg-gray-200'>
                     <ListItemIcon>
                         <Icon />
                     </ListItemIcon>
@@ -21,7 +21,7 @@ const Tab = ({icon: Icon, name, to}) => {
     );
 }
 
-const Sidebar = () => {
+const SideBar = () => {
     return (
         <List component="nav">
             <Tab icon={PeopleIcon} name={"Users"} to={"/users"}/>
@@ -31,4 +31,4 @@ const Sidebar = () => {
     );
 };
 
-export default Sidebar;
+export default SideBar;

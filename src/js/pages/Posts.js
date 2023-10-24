@@ -6,8 +6,8 @@ const Posts = () => {
     console.log(params, 'params Albums');
 
     return (
-        <article>
-            This is Posts
+        <article className="pl-10 text-cyan-500">
+            This is Postss
         </article>
     );
 }

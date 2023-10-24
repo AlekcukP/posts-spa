@@ -6,7 +6,7 @@ const Users = () => {
     console.log(params, 'params Users');
 
     return (
-        <article>
+        <article >
             This is User List
         </article>
     );
