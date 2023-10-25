@@ -19,7 +19,7 @@ const StyledBar = styled(MuiAppBar, {
     }),
     ...(open && {
         marginLeft: 240,
-        width: `calc(100% - 240px)`,
+        width: 'calc(100% - 240px)',
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,

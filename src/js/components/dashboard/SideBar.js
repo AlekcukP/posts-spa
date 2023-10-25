@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -7,6 +8,37 @@ import PeopleIcon from '@mui/icons-material/People';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import List from '@mui/material/List';
+import MuiDrawer from '@mui/material/Drawer';
+import Toolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
+const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+        '& .MuiDrawer-paper': {
+            position: 'relative',
+            whiteSpace: 'nowrap',
+            width: 240,
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            boxSizing: 'border-box',
+            ...(!open && {
+                overflowX: 'hidden',
+                transition: theme.transitions.create('width', {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen,
+                }),
+                width: theme.spacing(7),
+                [theme.breakpoints.up('sm')]: {
+                    width: theme.spacing(9),
+                },
+            }),
+        },
+    }),
+);
 
 const Tab = ({icon: Icon, name, to}) => {
     return (
@@ -21,13 +53,19 @@ const Tab = ({icon: Icon, name, to}) => {
     );
 }
 
-const SideBar = () => {
+const SideBar = ({ open, toggleSidebar }) => {
     return (
-        <List component="nav">
-            <Tab icon={PeopleIcon} name={"Users"} to={"/users"}/>
-            <Tab icon={LibraryBooksIcon} name={"Posts"} to={"/posts"}/>
-            <Tab icon={CollectionsIcon} name={"Albums"} to={"/albums"}/>
-        </List>
+        <SideBarDrawer variant="permanent" open={open}>
+            <Toolbar className='flex items-center justify-end px-[1px]'>
+                <IconButton onClick={toggleSidebar}><ChevronLeftIcon /></IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+                <Tab icon={PeopleIcon} name={"Users"} to={"/users"}/>
+                <Tab icon={LibraryBooksIcon} name={"Posts"} to={"/posts"}/>
+                <Tab icon={CollectionsIcon} name={"Albums"} to={"/albums"}/>
+            </List>
+        </SideBarDrawer>
     );
 };
 
