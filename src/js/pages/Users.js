@@ -1,17 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useGetUsers } from "../hooks/users";
 import { Link } from "react-router-dom";
+import { getGridNumericOperators } from "@mui/x-data-grid";
 import Card from "../components/dashboard/Card";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import Table from "../components/dashboard/table/Table";
-
-const LinkCell = ({ to }) => {
-    return (
-        <Link to={to}>
-            <OpenInNewIcon color="primary"/>
-        </Link>
-    );
-}
+import Table from "../components/dashboard/Table";
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -55,8 +48,32 @@ const columns = [
     },
 ];
 
+const LinkCell = ({ to }) => {
+    return (
+        <Link to={to}>
+            <OpenInNewIcon color="primary"/>
+        </Link>
+    );
+}
+
 const UsersPage = () => {
     const { data, error, isLoading } = useGetUsers();
+
+    const memoColumns = useMemo(
+        () => columns.map((col) => {
+            if (col.field !== 'id') {
+                return col;
+            }
+
+            return {
+                ...col,
+                filterOperators: getGridNumericOperators().filter(
+                    (operator) => operator.value === '=',
+                ),
+            };
+        }),
+        [columns],
+    );
 
     return (
         <Card
@@ -68,7 +85,7 @@ const UsersPage = () => {
         <Table
             className="h-5/6"
             rows={data}
-            columns={columns}
+            columns={memoColumns}
             initialState={{
                 pagination: {
                     paginationModel: { page: 0, pageSize: 10 },

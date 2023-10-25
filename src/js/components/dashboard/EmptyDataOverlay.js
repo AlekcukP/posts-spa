@@ -1,6 +1,7 @@
 import React from "react";
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import Typography from "@mui/material/Typography";
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -26,12 +27,12 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
     },
 }));
 
-const NoRowsOverlay = () => {
+const EmptyDataOverlay = ({ message = 'Empty Data' }) => {
     return (
         <StyledGridOverlay>
             <svg
-                width="120"
-                height="100"
+                width="220"
+                height="170"
                 viewBox="0 0 184 152"
                 aria-hidden
                 focusable="false"
@@ -68,9 +69,11 @@ const NoRowsOverlay = () => {
                     </g>
                 </g>
             </svg>
-            <Box sx={{ mt: 1 }}>No Rows</Box>
+            <Box sx={{ mt: 1 }}>
+                <Typography variant="h6">{ message }</Typography>
+            </Box>
         </StyledGridOverlay>
     );
 }
 
-export default NoRowsOverlay;
+export default EmptyDataOverlay;

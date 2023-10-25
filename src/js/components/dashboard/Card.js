@@ -15,10 +15,11 @@ const Card = ({ title, subheader, isLoading, error, children }) => {
             <CardHeader
                 title={title}
                 subheader={subheader}
+                className="py-3"
             />
 
-            <CardContent className="h-full">
-                {children}
+            <CardContent className="h-full py-2">
+                { children }
             </CardContent>
 
             <Modal

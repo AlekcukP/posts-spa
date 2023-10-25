@@ -1,11 +1,14 @@
 import { useQuery } from "react-query";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 export const useGetAlbums = () => {
-    const fetchAlbums = async () => {
-        const res = await axios.get("/api/albums");
+    const [searchParams] = useSearchParams();
+
+    const getAlbums = async () => {
+        const res = await axios.get("/api/albums", { params: searchParams });
         return res.data;
     };
 
-    return useQuery({ queryKey: ['albums'], queryFn: fetchAlbums });
+    return useQuery({ queryKey: ['albums'], queryFn: getAlbums });
 };

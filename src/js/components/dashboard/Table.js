@@ -1,6 +1,6 @@
 import React from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import NoRowsOverlay from "./NoRowsOverlay";
+import EmptyDataOverlay from "./EmptyDataOverlay";
 
 const Table = ({ rows, columns, ...props }) => {
     return (
@@ -8,7 +8,7 @@ const Table = ({ rows, columns, ...props }) => {
             rows={rows}
             columns={columns}
             slots={{
-                noRowsOverlay: NoRowsOverlay,
+                noRowsOverlay: EmptyDataOverlay,
             }}
             {...props}
         />

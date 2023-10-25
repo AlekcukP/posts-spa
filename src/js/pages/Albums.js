@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useGetAlbums } from "../hooks/albums";
 import Card from "../components/dashboard/Card";
-import Table from "../components/dashboard/table/Table";
+import Table from "../components/dashboard/Table";
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 320 },
@@ -11,9 +11,7 @@ const columns = [
 ];
 
 const AlbumsPage = () => {
-    const params = useParams();
-    console.log(params, 'params Albums');
-
+    const [searchParams] = useSearchParams();
     const { data, error, isLoading } = useGetAlbums();
 
     return (
@@ -30,6 +28,11 @@ const AlbumsPage = () => {
             initialState={{
                 pagination: {
                     paginationModel: { page: 0, pageSize: 10 },
+                },
+                filter: {
+                    filterModel: {
+                        items: [{ field: 'userId', operator: 'equals', value: searchParams.get('userId') ?? '' }],
+                    },
                 },
             }}
             pageSizeOptions={[5, 10, 15]}

@@ -1,11 +1,14 @@
 import { useQuery } from "react-query";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 export const useGetPosts = () => {
-    const fetchPosts = async () => {
-        const res = await axios.get("/api/posts");
+    const [searchParams] = useSearchParams();
+
+    const getPosts = async () => {
+        const res = await axios.get("/api/posts", { params: searchParams });
         return res.data;
     };
 
-    return useQuery({ queryKey: ['posts'], queryFn: fetchPosts });
+    return useQuery({ queryKey: ['posts'], queryFn: getPosts });
 };

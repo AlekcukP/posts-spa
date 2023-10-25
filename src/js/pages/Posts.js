@@ -1,41 +1,82 @@
 import React, { useState } from "react";
 import _ from "lodash";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useGetPosts } from "../hooks/posts";
 import Card from "../components/dashboard/Card";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Pagination from '@mui/material/Pagination';
 import Box from "@mui/material/Box";
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import SortIcon from '@mui/icons-material/Sort';
+import TablePagination from "@mui/material/TablePagination";
+import EmptyDataOverlay from "../components/dashboard/EmptyDataOverlay";
 
-const Post = ({ title, content, ...props }) => {
+const PostsStack = ({ rows }) => {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const posts = _.map(
+        rows,
+        post => <Post title={post.title} content={post.body} number={post.id} key={`post_${post.id}`} />
+    );
+
+    const postsChunk = _.chunk(posts, rowsPerPage);
+
+    if (_.isEmpty(rows)) {
+        return <EmptyDataOverlay message="No Posts Found" />
+    }
+
     return (
-        <Paper className="mt-2 px-2 py-1 flex flex-col max-w-[520px] h-32" elevation={3} {...props}>
+        <Box className="flex flex-col max-h-[38rem] border-[1px] border-gray-300 border-solid rounded items-center">
+            <Box className="py-1 px-2 self-start">
+                <Button variant="text" size="small" startIcon={<FilterAltIcon />}>Filter</Button>
+                <Button variant="text" size="small" startIcon={<SortIcon />}>Sort</Button>
+            </Box>
+
+            <Stack direction="row" useFlexGap flexWrap="wrap" className="justify-evenly overflow-auto grow">
+                { postsChunk.at(page)}
+            </Stack>
+
+            <Divider variant="fullWidth" flexItem />
+
+            <TablePagination
+                component="div"
+                count={posts.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                className="flex items-center self-end min-h-[53px]"
+            />
+        </Box>
+    );
+}
+
+const Post = ({ title, content, number, ...props }) => {
+    return (
+        <Paper className="m-2 px-2 py-1 flex flex-col max-w-[520px] min-h-32 justify-between" elevation={3} {...props}>
             <Typography className="text-center" variant="h6">{ title }</Typography>
             <Typography variant="body2">{ content }</Typography>
+            <Typography className="self-center" variant="caption" display="block" gutterBottom>{ number }</Typography>
         </Paper>
     );
 }
 
 const PostsPage = () => {
-    const [page, setPage] = useState(1);
-    const params = useParams();
-    console.log(params, 'params Albums');
-
+    const [searchParams] = useSearchParams();
     const { data, error, isLoading } = useGetPosts();
-
-    const posts = _.map(
-        data,
-        post => <Post title={post.title} content={post.body} key={`post_${post.id}`} />
-    );
-
-    const postsChunk = _.chunk(posts, 6);
-
-    const handleChange = (event, value) => {
-        setPage(value);
-    };
 
     return (
         <Card
@@ -44,24 +85,16 @@ const PostsPage = () => {
             isLoading={isLoading}
             error={error}
         >
-            <Box className="flex flex-col justify-between h-5/6 border-[1px] border-gray-300 border-solid rounded items-center">
-                <Stack direction="row" useFlexGap flexWrap="wrap" className="justify-evenly">
-                    { postsChunk.at(page)}
-                </Stack>
-
-                <Box className="flex justify-center w-full py-3 border-[1px] border-b-0 border-x-0 border-inherit border-solid">
-                    {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
-                    <Pagination
-                        onChange={handleChange}
-                        count={postsChunk.length}
-                        page={page}
-                        variant="outlined"
-                        color="primary"
-                        shape="rounded"
-                        size="small"
-                    />
-                </Box>
-            </Box>
+            <PostsStack
+                rows={data}
+                initialState={{
+                    filter: {
+                        filterModel: {
+                            items: [{ field: 'userId', operator: 'equals', value: searchParams.get('userId') ?? '' }],
+                        },
+                    },
+                }}
+            />
         </Card>
     );
 }
