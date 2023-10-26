@@ -8,7 +8,7 @@ const modes = {
 }
 
 module.exports = {
-    mode: modes.development,
+    mode: modes.production,
     entry: './src/index.js',
     devtool: 'source-map',
     stats: {
@@ -44,7 +44,7 @@ module.exports = {
         host: '0.0.0.0',
     },
     output: {
-        filename: path.join('static', '[name].[contenthash].js'),
+        filename: path.join('static', '[name].js'),
         path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         clean: true
@@ -98,9 +98,13 @@ module.exports = {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: path.join('media', '[name].[contenthash][ext]'),
+                    filename: path.join('media', '[name][ext]'),
                 }
-            }
+            },
+            {
+                test: /manifest\.json$/,
+                use: 'ignore-loader',
+            },
         ]
     }
 };

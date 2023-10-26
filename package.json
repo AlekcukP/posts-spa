@@ -57,6 +57,7 @@
     "gh-pages": "^6.0.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.1",
+    "ignore-loader": "^0.1.2",
     "jsxobj": "^1.1.0",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss": "^8.4.31",
