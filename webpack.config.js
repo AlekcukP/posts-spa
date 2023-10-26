@@ -14,9 +14,13 @@ module.exports = {
     stats: {
         warnings: false,
     },
+    resolve: {
+        extensions: ['.js', '.jsx'],
+        modules: ['node_modules', './src'],
+    },
     devServer: {
         static: {
-            directory: path.join(__dirname, 'dist'),
+            directory: path.join(__dirname, 'build'),
             watch: true
         },
         client: {
@@ -32,16 +36,16 @@ module.exports = {
                 pathRewrite: { '^/api': '' },
                 secure: false,
                 changeOrigin: true
-            },
+            }
         },
         liveReload: true,
         historyApiFallback: true,
-        port: 8080,
-        host: 'localhost',
+        port: 3000,
+        host: '0.0.0.0',
     },
     output: {
         filename: path.join('static', '[name].[contenthash].js'),
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         clean: true
     },
@@ -77,7 +81,7 @@ module.exports = {
                 },
             },
             {
-                test: /\.js$/,
+                test: /\.(js)$/,
                 enforce: "pre",
                 use: ["source-map-loader"],
             },

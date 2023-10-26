@@ -6,9 +6,7 @@ import Spinner from "../Spinner";
 import Modal from "./Modal";
 
 const Card = ({ title, subheader, isLoading, error, children }) => {
-    if (isLoading) {
-        return <Spinner />;
-    }
+    if (isLoading) return <Spinner />;
 
     return (
         <MuiCard className="h-full">

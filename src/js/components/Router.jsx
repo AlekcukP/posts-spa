@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from '../templates/Dashboard';
-import HomePage from '../pages/Home';
-import UsersPage from '../pages/Users';
-import AlbumsPage from '../pages/Albums';
-import PostsPage from '../pages/Posts';
+import DashboardTemplate from '../templates/DashboardTemplate';
+import HomePage from '../pages/HomePage';
+import UsersPage from '../pages/UsersPage';
+import AlbumsPage from '../pages/AlbumsPage';
+import PostsPage from '../pages/PostsPage';
 
 const Router = () => {
     return (
@@ -12,7 +12,7 @@ const Router = () => {
             <Routes>
                 <Route path='/' exact element={<HomePage />} />
 
-                <Route element={<Dashboard />}>
+                <Route element={<DashboardTemplate />}>
                     <Route path='/users' element={<UsersPage />} />
                     <Route path='/users/:userId' element={<UsersPage />} />
 

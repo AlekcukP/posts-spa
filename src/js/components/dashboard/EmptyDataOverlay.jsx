@@ -27,7 +27,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
     },
 }));
 
-const EmptyDataOverlay = ({ message = 'Empty Data' }) => {
+const EmptyDataOverlay = ({ message = 'No Records Found' }) => {
     return (
         <StyledGridOverlay>
             <svg

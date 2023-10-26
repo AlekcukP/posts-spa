@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -13,6 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { DashboardContext } from '../../templates/DashboardTemplate';
 
 const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
@@ -53,9 +54,11 @@ const Tab = ({icon: Icon, name, to}) => {
     );
 }
 
-const SideBar = ({ open, toggleSidebar }) => {
+const SideBar = () => {
+    const { sidebarToggle: { isSidebarOpen, toggleSidebar }} = useContext(DashboardContext);
+
     return (
-        <SideBarDrawer variant="permanent" open={open}>
+        <SideBarDrawer variant="permanent" open={isSidebarOpen}>
             <Toolbar className='flex items-center justify-end px-[1px]'>
                 <IconButton onClick={toggleSidebar}><ChevronLeftIcon /></IconButton>
             </Toolbar>
