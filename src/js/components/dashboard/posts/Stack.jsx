@@ -4,10 +4,10 @@ import classnames from "tailwindcss-classnames";
 import Box from "@mui/material/Box";
 import MuiStack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import EmptyDataOverlay from "../EmptyDataOverlay";
-import PostItem from "./PostItem";
-import Pagination from "./Pagination";
-import Controls from "./Controls";
+import EmptyDataOverlay from "../common/EmptyDataOverlay";
+import PostItem from "./Item";
+import Pagination from "./controls/Pagination";
+import ControlsMenu from "./controls/Menu";
 
 const Stack = ({ posts = [] }) => {
     return (
@@ -18,18 +18,19 @@ const Stack = ({ posts = [] }) => {
                 "min-h-[38rem]":  posts.length < 6
             }
         )}>
-            <Controls />
+            <ControlsMenu />
 
             <MuiStack direction="row" useFlexGap flexWrap="wrap" className="justify-evenly overflow-auto grow">
                 {
-                _.isEmpty(posts) ?
-                    <EmptyDataOverlay />
-                    : _.map(posts, post => <PostItem
-                        title={post.title}
-                        content={post.body}
-                        number={post.id}
-                        key={`post_${post.id}`}
-                    />)
+                    _.isEmpty(posts) ?
+                        <EmptyDataOverlay />
+                        : _.map(posts, post => <PostItem
+                            title={post.title}
+                            content={post.body}
+                            id={post.id}
+                            userId={post.userId}
+                            key={`post_${post.id}`}
+                        />)
                 }
             </MuiStack>
 

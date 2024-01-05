@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import SortOptions from "./SortOptions";
 import FilterOptions from "./FilterOptions";
 
-const Controls = () => {
+const ControlsMenu = () => {
     return (
         <Box className="py-1 px-2 self-start flex">
             <FilterOptions />
@@ -13,4 +13,4 @@ const Controls = () => {
     );
 }
 
-export default Controls;
+export default ControlsMenu;

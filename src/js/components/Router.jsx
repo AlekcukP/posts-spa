@@ -1,28 +1,28 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DashboardTemplate from '../templates/DashboardTemplate';
-import HomePage from '../pages/HomePage';
-import UsersPage from '../pages/UsersPage';
-import AlbumsPage from '../pages/AlbumsPage';
-import PostsPage from '../pages/PostsPage';
+import Dashboard from './dashboard/Dashboard';
+import Home from './Home';
+import UsersContent from './dashboard/users/Content';
+import AlbumsContent from './dashboard/albums/Content';
+import PostsContent from './dashboard/posts/Content';
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' exact element={<HomePage />} />
+                <Route path='/' exact element={<Home />} />
 
-                <Route element={<DashboardTemplate />}>
-                    <Route path='/users' element={<UsersPage />} />
-                    <Route path='/users/:userId' element={<UsersPage />} />
+                <Route element={<Dashboard />}>
+                    <Route path='/users' element={<UsersContent />} />
+                    <Route path='/users/:userId' element={<UsersContent />} />
 
-                    <Route path='/albums' element={<AlbumsPage />} />
-                    <Route path='/albums/:albumId' element={<AlbumsPage />} />
+                    <Route path='/albums' element={<AlbumsContent />} />
+                    <Route path='/albums/:albumId' element={<AlbumsContent />} />
 
-                    <Route path='/posts' element={<PostsPage />} />
-                    <Route path='/posts/:postId' element={<PostsPage />} />
-
+                    <Route path='/posts' element={<PostsContent />} />
+                    <Route path='/posts/:postId' element={<PostsContent />} />
                 </Route>
+
                 <Route path='*' element={<div>Not Found</div>} />
             </Routes>
         </BrowserRouter>

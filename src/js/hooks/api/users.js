@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
-import { API_URL } from "../../appConfig";
+import { API_URL } from "../../config";
 
 export const useGetUsers = () => {
     const { data: userRecords, error, isLoading } = useQuery({ queryKey: ['users'], queryFn: async () => {

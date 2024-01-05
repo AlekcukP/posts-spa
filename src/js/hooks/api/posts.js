@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
-import { API_URL } from "../../appConfig";
+import { API_URL } from "../../config";
 
 export const useGetPosts = () => {
     const { data: postRecords, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: async () => {

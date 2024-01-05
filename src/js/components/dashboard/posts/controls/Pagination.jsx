@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import _ from "lodash";
 import TablePagination from "@mui/material/TablePagination";
-import { PostsPageContext } from "../../../pages/PostsPage";
+import { PostsContext } from "../Content";
 
 const Pagination = () => {
     const {
@@ -12,7 +12,7 @@ const Pagination = () => {
             handlePostsChangePage,
             handlePostsChangeRecordsPerPage,
         }
-    } = useContext(PostsPageContext);
+    } = useContext(PostsContext);
 
     return (
         <TablePagination

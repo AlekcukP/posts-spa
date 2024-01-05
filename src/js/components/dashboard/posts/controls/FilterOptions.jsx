@@ -9,14 +9,54 @@ import FormControl from '@mui/material/FormControl';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
-import Select from "../../Select";
+import Select from "../../common/forms/Select";
 import { ClickAwayListener } from '@mui/base';
-import { PostsPageContext } from "../../../pages/PostsPage";
-import { filterColumnsByType, filterOperators } from "../../../utils/filterRecords";
-import { makeOptionsFromEntries, makeOptionsFromObjects } from "../../../helpers/forms";
-import { isOperatorRequireCompareValue } from "../../../utils/filterRecords";
-import { postsDataColumns } from "../../../tablesConfig";
+import { PostsContext } from "../Content";
+import { filterColumnsByType, filterOperators } from "./utils/filterRecords";
+import { isOperatorRequireCompareValue } from "./utils/filterRecords";
 import { useSearchParams } from "react-router-dom";
+
+const columns = [
+    {
+        field: 'id',
+        headerName: 'ID',
+        type: 'number',
+        sortable: true,
+        filterable: true
+    },
+    {
+        field: 'userId',
+        headerName: 'User ID',
+        type: 'number',
+        sortable: true,
+        filterable: true
+    },
+    {
+        field: 'title',
+        headerName: 'Title',
+        type: 'string',
+        sortable: true,
+        filterable: false
+    },
+    {
+        field: 'body',
+        headerName: 'Body',
+        type: 'string',
+        sortable: false,
+        filterable: false
+    }
+];
+
+const normalizeKeyString = keyString => keyString.replace(/([A-Z])/g, ' $1')
+    .replace(/^./, function(s) { return s.toUpperCase(); }).trim();
+
+const makeOptionsFromEntries = arr => _.map(arr, (value, key) => {
+    return { name: normalizeKeyString(key), value };
+});
+
+const makeOptionsFromObjects = (arr, valueAccessor, nameAccessor) => _.map(arr, obj => {
+    return { name: obj[nameAccessor], value: obj[valueAccessor]};
+});
 
 const FilterPopupMenu = () => {
     const [searchParams] = useSearchParams();
@@ -32,9 +72,9 @@ const FilterPopupMenu = () => {
             handleFilterOperatorChange,
             handleFilterValueChange
         },
-    } = useContext(PostsPageContext);
+    } = useContext(PostsContext);
 
-    const filteredColumns = filterColumnsByType(postsDataColumns, typeof Number());
+    const filteredColumns = filterColumnsByType(columns, typeof Number());
 
     const onResetFiltersBtnClick = useCallback(() => {
         if (_.isEmpty(postsFilterValue)) {
@@ -104,7 +144,7 @@ const FilterPopupMenu = () => {
 const FilterOptions = () => {
     const {
         postsFilterMenu: { filterMenuId, handleFilterMenuBtnClick, closePostsFilterMenu }
-    } = useContext(PostsPageContext);
+    } = useContext(PostsContext);
 
     return (
         <ClickAwayListener onClickAway={closePostsFilterMenu}>
