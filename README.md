@@ -4,8 +4,8 @@ This project is a React dashboard application created using Create React App. It
 
 
 ## Table of Contents
- - Getting Started
- - Available Scripts
+ - [Getting Started](#getting-started)
+ - [Available Scripts](#available-commands)
 
 
 
