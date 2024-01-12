@@ -5,6 +5,7 @@ import Home from './Home';
 import UsersContent from './dashboard/users/Content';
 import AlbumsContent from './dashboard/albums/Content';
 import PostsContent from './dashboard/posts/Content';
+import NotFound from './NotFound';
 
 const Router = () => {
     return (
@@ -23,7 +24,7 @@ const Router = () => {
                     <Route path='/posts/:postId' element={<PostsContent />} />
                 </Route>
 
-                <Route path='*' element={<div>Not Found</div>} />
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </HashRouter>
     );
