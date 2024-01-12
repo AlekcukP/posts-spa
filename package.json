@@ -2,6 +2,7 @@
   "name": "posts-spa",
   "version": "0.1.0",
   "homepage": "https://alekcukp.github.io/posts-spa/",
+  "proxy": "http://localhost:3000",
   "private": true,
   "engines": {
     "node": ">=14.21.3 <16.20.2"
