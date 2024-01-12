@@ -2,21 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin } = require('webpack');
+require('dotenv').config();
 
-const API_URL = {
-    DEV: '/api',
-    PROD: 'https://jsonplaceholder.typicode.com/'
-}
-
-const MODES = {
-    DEV: 'development',
-    PROD: 'production'
-}
-
-const MODE = MODES.PROD;
+const IS_PROD = process.env.MODE === process.env.PROD_MODE;
+const API_URL = IS_PROD ? process.env.PROD_API : process.env.DEV_API;
 
 module.exports = {
-    mode: MODE,
+    mode: process.env.MODE,
     entry: './src/index.js',
     devtool: 'source-map',
     stats: {
@@ -33,23 +25,23 @@ module.exports = {
         },
         client: {
             overlay: {
-                errors: true,
+                errors: IS_PROD ? false : true,
                 warnings: false,
-                runtimeErrors: true,
+                runtimeErrors: IS_PROD ? false : true,
             },
         },
         proxy: {
             '/api': {
-                target: API_URL.PROD,
-                pathRewrite: { [`^${API_URL.DEV}`]: '' },
+                target: process.env.PROD_API,
+                pathRewrite: { '^/api': '' },
                 secure: false,
                 changeOrigin: true
             }
         },
         liveReload: true,
         historyApiFallback: true,
-        port: 3000,
-        host: '0.0.0.0',
+        port: process.env.PORT,
+        host: process.env.HOST,
     },
     output: {
         filename: path.join('[contenthash].js'),
@@ -72,8 +64,7 @@ module.exports = {
             ],
         }),
         new DefinePlugin({
-            PRODUCTION: JSON.stringify(MODE === MODES.PROD),
-            API_URL: JSON.stringify(MODE === MODES.PROD ? API_URL.PROD : API_URL.DEV)
+            API_URL: JSON.stringify(API_URL)
         })
     ],
     module: {
