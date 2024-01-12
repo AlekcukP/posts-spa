@@ -1,14 +1,14 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { DefinePlugin } = require('webpack');
+require('dotenv').config();
 
-const modes = {
-    development: 'development',
-    production: 'production'
-}
+const IS_PROD = process.env.MODE === process.env.PROD_MODE;
+const API_URL = IS_PROD ? process.env.PROD_API : process.env.DEV_API;
 
 module.exports = {
-    mode: modes.production,
+    mode: process.env.MODE,
     entry: './src/index.js',
     devtool: 'source-map',
     stats: {
@@ -25,14 +25,14 @@ module.exports = {
         },
         client: {
             overlay: {
-                errors: true,
+                errors: IS_PROD ? false : true,
                 warnings: false,
-                runtimeErrors: true,
+                runtimeErrors: IS_PROD ? false : true,
             },
         },
         proxy: {
             '/api': {
-                target: 'https://jsonplaceholder.typicode.com/',
+                target: process.env.PROD_API,
                 pathRewrite: { '^/api': '' },
                 secure: false,
                 changeOrigin: true
@@ -40,11 +40,11 @@ module.exports = {
         },
         liveReload: true,
         historyApiFallback: true,
-        port: 3000,
-        host: '0.0.0.0',
+        port: process.env.PORT,
+        host: process.env.HOST,
     },
     output: {
-        filename: path.join('static', '[name].js'),
+        filename: path.join('[contenthash].js'),
         path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         clean: true
@@ -58,15 +58,14 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'public', 'manifest.json'),
-                    to: 'manifest.json',
-                },
-                {
                     from: path.resolve(__dirname, 'public', 'robots.txt'),
                     to: 'robots.txt',
                 },
             ],
         }),
+        new DefinePlugin({
+            API_URL: JSON.stringify(API_URL)
+        })
     ],
     module: {
         rules: [
@@ -100,11 +99,7 @@ module.exports = {
                 generator: {
                     filename: path.join('media', '[name][ext]'),
                 }
-            },
-            {
-                test: /manifest\.json$/,
-                use: 'ignore-loader',
-            },
+            }
         ]
     }
 };

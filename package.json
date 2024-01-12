@@ -1,7 +1,7 @@
 {
   "name": "posts-spa",
   "version": "0.1.0",
-  "homepage": "https://alekcukp.github.io/posts-spa/",
+  "homepage": "https://alekcukp.github.io/posts-spa",
   "private": true,
   "engines": {
     "node": ">=14.21.3 <16.20.2"
@@ -13,6 +13,7 @@
     "@mui/material": "^5.14.14",
     "@mui/x-data-grid": "^6.16.3",
     "axios": "^1.5.1",
+    "dotenv": "^16.3.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
