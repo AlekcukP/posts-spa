@@ -58,10 +58,6 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'public', 'manifest.json'),
-                    to: 'manifest.json',
-                },
-                {
                     from: path.resolve(__dirname, 'public', 'robots.txt'),
                     to: 'robots.txt',
                 },
@@ -100,11 +96,7 @@ module.exports = {
                 generator: {
                     filename: path.join('media', '[name][ext]'),
                 }
-            },
-            {
-                test: /manifest\.json$/,
-                use: 'ignore-loader',
-            },
+            }
         ]
     }
 };
