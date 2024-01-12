@@ -1,10 +1,10 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import DashboardTemplate from '../templates/DashboardTemplate';
-import HomePage from '../pages/HomePage';
-import UsersPage from '../pages/UsersPage';
-import AlbumsPage from '../pages/AlbumsPage';
-import PostsPage from '../pages/PostsPage';
+import Dashboard from './dashboard/Dashboard';
+import Home from './Home';
+import UsersContent from './dashboard/users/Content';
+import AlbumsContent from './dashboard/albums/Content';
+import PostsContent from './dashboard/posts/Content';
 
 const Router = () => {
     return (
