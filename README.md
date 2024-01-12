@@ -22,14 +22,14 @@ To explore this project and see it in action, follow these steps:
     cd <project-directory>
 ```
 
-3. Build the Docker container: <br>
-```sh
-    make build
-```
-
-4. Create `.env` file:
+3. Create `.env` file:
 ```sh
     cp .example-env .env
+```
+
+4. Build the Docker container: <br>
+```sh
+    make build
 ```
 
 5. Open your web browser and go to `http://localhost:3000` to view the app.
