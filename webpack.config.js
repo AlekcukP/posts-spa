@@ -1,14 +1,22 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
-const modes = {
-    development: 'development',
-    production: 'production'
+const API_URL = {
+    DEV: '/api',
+    PROD: 'https://jsonplaceholder.typicode.com/'
 }
 
+const MODES = {
+    DEV: 'development',
+    PROD: 'production'
+}
+
+const MODE = MODES.PROD;
+
 module.exports = {
-    mode: modes.production,
+    mode: MODE,
     entry: './src/index.js',
     devtool: 'source-map',
     stats: {
@@ -32,8 +40,8 @@ module.exports = {
         },
         proxy: {
             '/api': {
-                target: 'https://jsonplaceholder.typicode.com/',
-                pathRewrite: { '^/api': '' },
+                target: API_URL.PROD,
+                pathRewrite: { [`^${API_URL.DEV}`]: '' },
                 secure: false,
                 changeOrigin: true
             }
@@ -63,6 +71,10 @@ module.exports = {
                 },
             ],
         }),
+        new DefinePlugin({
+            PRODUCTION: JSON.stringify(MODE === MODES.PROD),
+            API_URL: JSON.stringify(MODE === MODES.PROD ? API_URL.PROD : API_URL.DEV)
+        })
     ],
     module: {
         rules: [
