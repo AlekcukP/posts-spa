@@ -22,12 +22,17 @@ To explore this project and see it in action, follow these steps:
     cd <project-directory>
 ```
 
-3. Build the Docker container: <br>
+3. Create `.env` file:
+```sh
+    cp .example-env .env
+```
+
+4. Build the Docker container: <br>
 ```sh
     make build
 ```
 
-4. Open your web browser and go to `http://localhost:3000` to view the app.
+5. Open your web browser and go to `http://localhost:3000` to view the app.
 
 The development server will automatically reload when you make changes, and any lint errors will be displayed in the console.
 
