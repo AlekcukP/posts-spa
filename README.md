@@ -27,7 +27,12 @@ To explore this project and see it in action, follow these steps:
     make build
 ```
 
-4. Open your web browser and go to `http://localhost:3000` to view the app.
+4. Create `.env` file:
+```sh
+    cp .example-env .env
+```
+
+5. Open your web browser and go to `http://localhost:3000` to view the app.
 
 The development server will automatically reload when you make changes, and any lint errors will be displayed in the console.
 
