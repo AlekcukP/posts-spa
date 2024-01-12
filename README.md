@@ -1,5 +1,5 @@
 # React Dashboard App
-This project is a React dashboard application created using Create React App. It is designed to demonstrate my front-end development skills by utilizing React, Material-UI, and Tailwind CSS libraries. The application fetches data from JSONPlaceholder, showcasing it in various sections, including an initial page and a dashboard with a user table, articles list, and albums page.
+Welcome to the Posts SPA – a dynamic React test application that serves as a captivating display of my front-end development skills. Immerse yourself in the seamless integration of cutting-edge technologies, including React, Material-UI, and Tailwind CSS.
 
 
 
@@ -55,7 +55,7 @@ Runs the app in development mode.
 Open `http://localhost:3000` to view it in your browser. The page will automatically reload when you make changes, and you can check for lint errors in the console.
 
 - `npm build` <br>
-Builds the app for production in the `dist` folder. This process correctly bundles React in production mode and optimizes the build for the best performance. The build is minified, and the filenames include hashes, making your app ready for deployment. See the deployment section for more information.
+Builds the app for production in the `dist` folder. This process correctly bundles React in production mode and optimizes the build for the best performance. The build is minified, and the filenames include hashes, making your app ready for deployment.
 
 - `npm run watch` <br>
 Watches for changes in your source code and automatically triggers the build process when modifications are detected. This is particularly useful during development as it ensures that your app stays up to date with the latest changes without manually triggering the build process. Simply run this command, and it will keep an eye on your code, updating the build as needed.
