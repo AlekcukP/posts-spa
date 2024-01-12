@@ -11,7 +11,7 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
-import { PostsPageContext } from "../../../pages/PostsPage";
+import { PostsContext } from "../Content";
 import { ClickAwayListener } from '@mui/base';
 
 const SortPopupMenu = () => {
@@ -21,7 +21,7 @@ const SortPopupMenu = () => {
             setAscendingPostsSortOrder,
             setDescendingPostsSortOrder
         }
-    } = useContext(PostsPageContext);
+    } = useContext(PostsContext);
 
     return (
             <Popper
@@ -54,7 +54,7 @@ const SortPopupMenu = () => {
 const SortOptions = () => {
     const {
         postsSortMenu: { sortMenuId, handleSortMenuBtnClick, closePostsSortMenu }
-    } = useContext(PostsPageContext);
+    } = useContext(PostsContext);
 
     return (
         <ClickAwayListener onClickAway={closePostsSortMenu}>

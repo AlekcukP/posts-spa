@@ -1,18 +1,18 @@
 import React, { createContext } from 'react';
 import { Outlet } from "react-router-dom";
 import Box from '@mui/material/Box';
-import SideBar from '../components/dashboard/SideBar';
-import AppBar from '../components/dashboard/AppBar';
-import Page from '../components/dashboard/Page';
-import { useSidebarToggle } from '../hooks/components/useSidebarToggle';
+import SideBar from './common/SideBar';
+import NavBar from './common/NavBar';
+import Page from './common/Page';
+import { useSidebar } from '../../hooks/components/common/useSidebar';
 
 const DashboardContext = createContext(null);
 
-const DashboardTemplate = () => {
+const Dashboard = () => {
     return (
-        <DashboardContext.Provider value={{ sidebarToggle: useSidebarToggle() }}>
+        <DashboardContext.Provider value={{ ...useSidebar() }}>
             <Box className="flex h-full">
-                <AppBar />
+                <NavBar />
                 <SideBar />
                 <Page>
                     <Outlet />
@@ -23,4 +23,4 @@ const DashboardTemplate = () => {
 };
 
 export { DashboardContext };
-export default DashboardTemplate;
+export default Dashboard;

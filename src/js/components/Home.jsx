@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-const HomePage = () => {
+const Home = () => {
     return (
         <Box className="h-full w-full flex justify-center items-center bg-gradient-circle">
             <Card variant="outlined" className="max-w-md h-1/2">
@@ -35,4 +35,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Home;

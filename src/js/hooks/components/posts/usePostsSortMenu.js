@@ -6,7 +6,10 @@ export const usePostsSortMenu = () => {
     const sortMenuId = sortMenuOpen ? 'posts-sort-menu' : undefined;
 
     const handleSortMenuBtnClick = useCallback(
-        (event) => setSortMenuAnchorEl(sortMenuAnchorEl ? null : event.currentTarget),
+        e => {
+            const anchorEl = sortMenuAnchorEl ? null : e.currentTarget;
+            setSortMenuAnchorEl(anchorEl)
+        },
         [sortMenuAnchorEl]
     );
 

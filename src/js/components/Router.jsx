@@ -10,19 +10,19 @@ const Router = () => {
     return (
         <HashRouter>
             <Routes>
-                <Route path='/' exact element={<HomePage />} />
+                <Route path='/' exact element={<Home />} />
 
-                <Route element={<DashboardTemplate />}>
-                    <Route path='/users' element={<UsersPage />} />
-                    <Route path='/users/:userId' element={<UsersPage />} />
+                <Route element={<Dashboard />}>
+                    <Route path='/users' element={<UsersContent />} />
+                    <Route path='/users/:userId' element={<UsersContent />} />
 
-                    <Route path='/albums' element={<AlbumsPage />} />
-                    <Route path='/albums/:albumId' element={<AlbumsPage />} />
+                    <Route path='/albums' element={<AlbumsContent />} />
+                    <Route path='/albums/:albumId' element={<AlbumsContent />} />
 
-                    <Route path='/posts' element={<PostsPage />} />
-                    <Route path='/posts/:postId' element={<PostsPage />} />
-
+                    <Route path='/posts' element={<PostsContent />} />
+                    <Route path='/posts/:postId' element={<PostsContent />} />
                 </Route>
+
                 <Route path='*' element={<div>Not Found</div>} />
             </Routes>
         </HashRouter>

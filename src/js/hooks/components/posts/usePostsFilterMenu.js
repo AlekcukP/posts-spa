@@ -6,7 +6,10 @@ export const usePostsFilterMenu = () => {
     const filterMenuId = filterMenuOpen ? 'posts-filter-menu' : undefined;
 
     const handleFilterMenuBtnClick = useCallback(
-        (event) => setFilterMenuAnchorEl(filterMenuAnchorEl ? null : event.currentTarget),
+        e => {
+            const anchorEl = filterMenuAnchorEl ? null : e.currentTarget;
+            setFilterMenuAnchorEl(anchorEl)
+        },
         [filterMenuAnchorEl]
     );
 
