@@ -12,9 +12,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Select from "../../common/forms/Select";
 import { ClickAwayListener } from '@mui/base';
 import { PostsContext } from "../Content";
-import { filterColumnsByType, filterOperators } from "./utils/filterRecords";
-import { isOperatorRequireCompareValue } from "./utils/filterRecords";
+import { filterColumnsByType, filterOperators } from "../utils/filterRecords";
+import { isOperatorRequireCompareValue } from "../utils/filterRecords";
 import { useSearchParams } from "react-router-dom";
+
+import { PostsTableControlContext } from "../Table";
 
 const columns = [
     {
@@ -142,9 +144,22 @@ const FilterPopupMenu = () => {
 };
 
 const FilterOptions = () => {
-    const {
-        postsFilterMenu: { filterMenuId, handleFilterMenuBtnClick, closePostsFilterMenu }
-    } = useContext(PostsContext);
+    const [filterMenuAnchorEl, setFilterMenuAnchorEl] = useState(null);
+    const filterMenuOpen = Boolean(filterMenuAnchorEl);
+    const filterMenuId = filterMenuOpen ? 'posts-filter-menu' : undefined;
+
+    const handleFilterMenuBtnClick = useCallback(
+        e => {
+            const anchorEl = filterMenuAnchorEl ? null : e.currentTarget;
+            setFilterMenuAnchorEl(anchorEl)
+        },
+        [filterMenuAnchorEl]
+    );
+
+    const closePostsFilterMenu = useCallback(
+        () => filterMenuOpen && setFilterMenuAnchorEl(null),
+        [filterMenuOpen]
+    );
 
     return (
         <ClickAwayListener onClickAway={closePostsFilterMenu}>

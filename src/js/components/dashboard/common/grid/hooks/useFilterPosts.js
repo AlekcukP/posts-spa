@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useState, useMemo } from "react";
-import { filterOperators } from "../../../components/dashboard/posts/controls/utils/filterRecords";
+import { filterOperators } from "../utils/filterRecords";
 
 export const useFilterPosts = () => {
     const [postsFilterColumn, setPostsFilterColumn] = useState(null);

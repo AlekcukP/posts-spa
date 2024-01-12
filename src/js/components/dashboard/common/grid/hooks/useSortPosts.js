@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { sortOrders, defaultSortField } from "../../../components/dashboard/posts/controls/utils/sortRecords";
+import { sortOrders, defaultSortField } from "../utils/sortRecords";
 
 export const useSortPosts = () => {
     const [postsSortOrder, setPostsSortOrder] = useState(sortOrders.asc);
