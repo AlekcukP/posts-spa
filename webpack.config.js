@@ -44,7 +44,7 @@ module.exports = {
         host: '0.0.0.0',
     },
     output: {
-        filename: path.join('static', '[name].js'),
+        filename: path.join('[contenthash].js'),
         path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         clean: true
