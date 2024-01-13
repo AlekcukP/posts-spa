@@ -10,3 +10,12 @@ body {
 .bg-gradient-circle {
     background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 }
+
+.grid-pagination div,
+.grid-pagination p {
+    @apply mx-auto md:mx-0 md:px-2 md:ml-auto overflow-hidden;
+}
+
+.grid-pagination .MuiToolbar-root > .MuiTablePagination-actions {
+    @apply mx-auto md:mx-0;
+}

@@ -2,9 +2,9 @@ import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './dashboard/Dashboard';
 import Home from './Home';
-import UsersContent from './dashboard/users/Content';
-import AlbumsContent from './dashboard/albums/Content';
-import PostsContent from './dashboard/posts/Content';
+import UsersContent from './dashboard/UsersContent';
+import AlbumsContent from './dashboard/AlbumsContent';
+import PostsContent from './dashboard/PostsContent';
 import NotFound from './NotFound';
 
 const Router = () => {

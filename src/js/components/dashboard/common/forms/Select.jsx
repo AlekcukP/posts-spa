@@ -3,6 +3,7 @@ import _ from "lodash";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
+import ComponentsHelper from "../../../../helpers/components";
 
 const Select = ({ onChange, id, value, options, name, ...props }) => {
     return (
@@ -17,8 +18,8 @@ const Select = ({ onChange, id, value, options, name, ...props }) => {
             >
                 { _.map(
                     options,
-                    option => <option key={`option_${option.value}`} value={option.value}>
-                        { option.name }
+                    ({ name, value }) => <option key={ComponentsHelper.generateKey('SelectOption')} value={value}>
+                        { name }
                     </option>
                 )}
             </NativeSelect>

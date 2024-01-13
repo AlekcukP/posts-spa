@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -13,10 +13,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { DashboardContext } from '../Dashboard';
 
 const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
+        height: '100%',
+        position: 'absolute',
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -32,7 +33,7 @@ const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
                 }),
-                width: theme.spacing(7),
+                width: theme.spacing(0),
                 [theme.breakpoints.up('sm')]: {
                     width: theme.spacing(9),
                 },
@@ -54,13 +55,11 @@ const Tab = ({icon: Icon, name, to}) => {
     );
 }
 
-const SideBar = () => {
-    const { isSidebarOpen, hideSidebar } = useContext(DashboardContext);
-
+const SideBar = ({ onClick, isOpen }) => {
     return (
-        <SideBarDrawer variant="permanent" open={isSidebarOpen}>
+        <SideBarDrawer variant="permanent" open={isOpen}>
             <Toolbar className='flex items-center justify-end px-[1px]'>
-                <IconButton onClick={hideSidebar}>
+                <IconButton onClick={onClick}>
                     <ChevronLeftIcon />
                 </IconButton>
             </Toolbar>
