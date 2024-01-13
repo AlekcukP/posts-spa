@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { styled } from '@mui/material/styles';
 import classnames from 'tailwindcss-classnames';
 import MuiAppBar from '@mui/material/AppBar';
@@ -6,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { DashboardContext } from "../Dashboard";
 
 const StyledBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
@@ -27,16 +26,15 @@ const StyledBar = styled(MuiAppBar, {
     }),
 }));
 
-const NavBar = () => {
-    const { isSidebarOpen, openSidebar } = useContext(DashboardContext);
+const NavBar = ({ onClick, isOpen }) => {
 
-    return <StyledBar position='static' open={isSidebarOpen}>
+    return <StyledBar position='static' open={isOpen}>
         <Toolbar className='pr-6'>
             <IconButton
                 edge="start"
                 color="inherit"
-                onClick={openSidebar}
-                className={classnames('mr-9', { 'hidden': isSidebarOpen })}
+                onClick={onClick}
+                className={classnames('mr-9', { 'hidden': isOpen })}
             >
                 <MenuIcon />
             </IconButton>

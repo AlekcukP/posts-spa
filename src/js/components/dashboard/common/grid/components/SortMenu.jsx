@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import _ from "lodash";
 import Paper from "@mui/material/Paper";
 import ListItemText from '@mui/material/ListItemText';
@@ -12,17 +12,11 @@ import Divider from '@mui/material/Divider';
 import ToggleMenu from "./ToggleMenu";
 import SortMenuHelper from "../helpers/sort/menu";
 import ComponentsHelper from "../../../../../helpers/components";
-import { Context } from "../Grid";
 import { useControls } from "../hooks/useControls";
 
-const Item = ({ field, order, name }) => {
-    const { hasMatchingSortRule, handleSortRuleChange } = useContext(Context);
-
+const ListItem = ({ order, name, selected, onClick }) => {
     return (
-        <MenuItem
-            selected={hasMatchingSortRule(field, order)}
-            onClick={() => handleSortRuleChange(field, order)}
-        >
+        <MenuItem selected={selected} onClick={onClick}>
             <ListItemIcon>
                 { SortMenuHelper.isOrderAsc(order) ? <NorthIcon /> : <SouthIcon /> }
             </ListItemIcon>
@@ -31,28 +25,22 @@ const Item = ({ field, order, name }) => {
     );
 }
 
-const List = () => {
-    const { columns } = useContext(Context);
-    const sortOrders = _.values(SortMenuHelper.ORDERS);
-    const sortableColumns = columns.getSortable().toArray();
-
-    const menuItems = _.map(
-        sortableColumns,
-        ({ field, headerName }, i) => (
-            <Fragment key={ComponentsHelper.generateKey('MenuList')}>
-                <MenuList>
-                    { _.map(sortOrders, order => (
-                        <Item
-                            key={ComponentsHelper.generateKey('MenuItem')}
-                            field={field}
-                            order={order}
-                            name={headerName ?? field}
-                        />
-                    ))}
-                </MenuList>
-                { sortableColumns.length !== i ? <Divider variant="fullWidth" flexItem /> : null }
-            </Fragment>
-        )
+const List = ({ fields, selected, onSortModelChange }) => {
+    const menuItems = _.map(fields, (field, index) => (
+        <Fragment key={ComponentsHelper.generateKey('MenuList')}>
+            <MenuList>
+                { _.map(_.values(SortMenuHelper.ORDERS), order => (
+                    <ListItem
+                        key={ComponentsHelper.generateKey('MenuItem')}
+                        order={order}
+                        name={field}
+                        onClick={() => onSortModelChange([{ field, sort: order }])}
+                        selected={_.isEqual(selected, { field, sort: order })}
+                    />
+                ))}
+            </MenuList>
+            { fields.length !== index && <Divider variant="fullWidth" flexItem /> }
+        </Fragment>)
     );
 
     return (
@@ -60,7 +48,7 @@ const List = () => {
     );
 }
 
-const SortMenu = () => {
+const SortMenu = (props) => {
     const {
         sortMenuId,
         sortMenuAnchorEl,
@@ -80,7 +68,7 @@ const SortMenu = () => {
             open={sortMenuOpen}
             anchorEl={sortMenuAnchorEl}
         >
-            <List/>
+            <List { ...props }/>
         </ToggleMenu>
     );
 }

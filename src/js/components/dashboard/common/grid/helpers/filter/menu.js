@@ -20,8 +20,8 @@ class FilterMenuHelper {
         return _.map(entries, (value, key) => ({ name: FilterMenuHelper.normalizeKeyString(key), value }));
     }
 
-    static makeOptionsFromObjects(arr, valueAccessor, nameAccessor) {
-        return _.map(arr, obj => ({ name: obj[nameAccessor], value: obj[valueAccessor] }));
+    static makeOptionsFromObjects(fields) {
+        return _.map(fields, field => ({ name: _.capitalize(field), value: field }));
     }
 
     static isOperatorRequireCompareValue(operators, rule) {

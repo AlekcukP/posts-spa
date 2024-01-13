@@ -1,11 +1,14 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import _ from "lodash";
-import Table from "../common/Table";
-import { LinkCell } from "../common/Table";
+import Card from "./common/Card";
+import Table from "./common/Table";
+import { useGetUsers } from "../../api/users";
+import { LinkCell } from "./common/Table";
 import { getGridStringOperators } from "@mui/x-data-grid";
-import { useSearchParams } from "react-router-dom";
+import ColumnsList from "../../classes/columnsList";
+import { useQueryParams } from "./common/grid/hooks/useQueryParams";
 
-const columns = [
+const columns = ColumnsList.from([
     {
         field: 'id',
         headerName: 'ID',
@@ -17,7 +20,7 @@ const columns = [
         field: 'username',
         headerName: 'Username',
         width: 150,
-        sortable: true,
+        sortable: false,
         filterable: false
 },
     {
@@ -77,62 +80,96 @@ const columns = [
         filterable: false,
         renderCell: params => <LinkCell to={`/albums?userId=${params.id}`}/>
     }
-];
+]);
 
-const UsersTable = ({ rows }) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+const UsersContent = () => {
+    const { userRecords, error, isLoading } = useGetUsers();
+    const { searchParams, omitSearchParams, mergeSearchParams } = useQueryParams();
 
     const memoColumns = useMemo(
-        () => _.map(columns, column => {
+        () => columns.map(column => {
             return column.filterable ? {
                 ...column,
                 filterOperators: getGridStringOperators()
                     .filter(operator => operator.value === 'equals')
                     .map(operator => ({ ...operator }))
             } : column;
-        }), []);
+        }).toArray(), []);
 
-        const onFilterChange = filterModel => {
-            if (filterModel.items.length) {
+        const handleFilterChange = filterModel => {
+            console.log(filterModel);
+            omitSearchParams(columns.getFilterableFields());
+
+            if (filterModel?.items?.length) {
                 const { field, value } = _.first(filterModel.items);
 
-                if (searchParams.size) {
-                    for (const key of searchParams.keys()) {
-                        searchParams.delete(key);
-                    }
-                }
-
-                if (value) {
-                    searchParams.set(field, value);
-                }
-
-                setSearchParams(searchParams.toString());
+                mergeSearchParams(
+                    field && value ? { [field]: value } : {}
+                );
             }
 
             return filterModel;
-        };
+        }
+
+        const handleSortChange = sortModel => {
+            omitSearchParams(['field', 'sort']);
+
+            if (!_.isEmpty(sortModel)) {
+                const { field, sort } = _.first(sortModel);
+
+                mergeSearchParams(
+                    field && sort ? { field, sort } : {}
+                );
+            }
+
+            return sortModel;
+        }
+
+        const handlePaginationChange = ({ page, pageSize }) => {
+            omitSearchParams(['page', 'pageSize']);
+
+            if (_.isInteger(page) && _.isInteger(pageSize)) mergeSearchParams({ page, pageSize });
+
+            return { page, pageSize };
+        }
 
     return (
+        <Card
+            title={"Users List"}
+            subheader={"Browse All Users Retrieved from the API"}
+            isLoading={isLoading}
+            error={error}
+        >
             <Table
                 className="h-[72vh] lg:h-[75vh]"
-                rows={rows}
+                rows={userRecords}
                 columns={memoColumns}
                 pageSizeOptions={[5, 10, 15]}
-                onFilterModelChange={onFilterChange}
+                onFilterModelChange={handleFilterChange}
+                onSortModelChange={handleSortChange}
+                onPaginationModelChange={handlePaginationChange}
+                disableMultipleColumnsFiltering={false}
                 initialState={{
                     pagination: {
-                        paginationModel: { page: 0, pageSize: 10 },
+                        paginationModel: { page: searchParams.get('page') ?? 0, pageSize: searchParams.get('pageSize') ?? 10 },
                     },
                     filter: {
                         filterModel: {
                             items: [
                                 { field: 'id', operator: 'equals', value: searchParams.get('id') },
+                                { field: 'userId', operator: 'equals', value: searchParams.get('userId') },
                             ],
                         },
                     },
+                    sorting: {
+                        sortModel: [
+                            { field: searchParams.get('field'), sort: searchParams.get('sort') }
+                        ],
+                    },
                 }}
             />
+        </Card>
     );
 };
 
-export default UsersTable;
+export default UsersContent;

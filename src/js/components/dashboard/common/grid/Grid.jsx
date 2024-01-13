@@ -1,24 +1,57 @@
-import React, { createContext } from "react";
+import React, { useReducer } from "react";
 import _ from "lodash";
 import classnames from "tailwindcss-classnames";
-import EmptyDataOverlay from "../EmptyDataOverlay";
 import Box from "@mui/material/Box";
+import TablePagination from "@mui/material/TablePagination";
 import Divider from '@mui/material/Divider';
-import Pagination from "./components/Pagination";
-import ControlBar from "./components/ControlBar";
-import Data from "./classes/data";
 import Stack from "./components/Stack";
-import Columns from "./classes/columns";
-import { useGridState } from "./hooks/useGridState";
+import SortMenu from "./components/SortMenu";
+import FilterMenu from "./components/FilterMenu";
+import reducer from "./utils/reducer";
 
-const Context = createContext(null);
+const defaultState = {
+    pagination: { page: 0, pageSize: 10 },
+    filter: { items: [] },
+    sorting: { sortModel: [{ field: null, sort: null }] }
+}
 
-const Grid = (props) => {
-    const { className, rows, initialState, columns } = props;
-    const state = useGridState(initialState);
+const Grid = ({
+    columns,
+    cell,
+    className,
+    rows,
+    initialState,
+    onFilterModelChange,
+    onSortModelChange,
+    onPaginationModelChange
+}) => {
+    const [state, dispatch] = useReducer(reducer, {...defaultState, ...initialState});
 
-    const collection = Data.from(rows);
-    const columnsList = Columns.from(columns);
+    const {
+        pagination: { page, pageSize },
+        filter: { items },
+        sorting: { sortModel: [firstSortModel] },
+    } = state;
+
+    const handleSortRuleChange = (sortModel) => dispatch({
+        type: 'sort_change',
+        sortModel: onSortModelChange(sortModel)
+    });
+
+    const handleChangePage = (e, page) => {
+        dispatch({
+            type: 'page_change',
+            paginationModel: onPaginationModelChange({ page, pageSize })
+        })
+    }
+    const handlePageSizeChange = ({ target: { value } }) => {
+        dispatch({
+            type: 'page_size_change',
+            paginationModel: onPaginationModelChange({ page: 0, pageSize: parseInt(value, 10) })
+        });
+    };
+
+    const sortedRows = _.orderBy(rows, [firstSortModel.field], [firstSortModel.sort])
 
     return (
         <Box className={classnames(
@@ -36,26 +69,34 @@ const Grid = (props) => {
             ],
             className
         )}>
-            <Context.Provider value={{
-                ...state,
-                ...props,
-                rows: collection.sortBy(state.sortRules).paginateBy(state.rowsPerPage).get(state.page),
-                count: collection.count(),
-                columns: columnsList
-            }}>
-                <ControlBar />
+            <Box className="py-1 px-2 self-start flex w-full">
+                { columns.hasSortableFields() && <SortMenu
+                    fields={columns.getSortableFields()}
+                    selected={firstSortModel}
+                    onSortModelChange={handleSortRuleChange}
+                /> }
+                { columns.hasFilterableFields() && <FilterMenu
+                    fields={columns.getFilterableFields()}
+                /> }
+            </Box>
 
-                <Divider variant="fullWidth" flexItem />
+            <Divider variant="fullWidth" flexItem />
 
-                { collection.count() < 0 ? <EmptyDataOverlay /> : <Stack /> }
+            <Stack rows={sortedRows} cell={cell} />
 
-                <Divider variant="fullWidth" flexItem />
+            <Divider variant="fullWidth" flexItem />
 
-                <Pagination />
-            </Context.Provider>
+            <TablePagination
+                className="grid-pagination flex items-center min-h-12 w-full justify-center md:justify-end bg-white"
+                component="div"
+                count={rows.length}
+                page={page}
+                rowsPerPage={pageSize}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handlePageSizeChange}
+            />
         </Box>
     );
 }
 
-export { Context };
 export default Grid;

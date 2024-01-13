@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useCallback } from "react";
 import _ from "lodash";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -11,19 +11,19 @@ import Select from "../../forms/Select";
 import ToggleMenu from "./ToggleMenu";
 import FilterMenuHelper from "../helpers/filter/menu";
 import { useControls } from "../hooks/useControls";
-import { Context } from "../Grid";
 
-const List = () => {
-    const {
-        columns,
-        filterColumn,
-        filterOperator,
-        filterValue,
-        handleFilterOperatorChange,
-        handleFilterColumnChange,
-        handleFilterValueChange,
-        onResetFiltersBtnClick
-    } = useContext(Context);
+const List = ({ fields }) => {
+    const [filterColumn, setFilterColumn] = useState(null);
+    const [filterOperator, setFilterOperator] = useState(null);
+    const [filterValue, setFilterValue] = useState(null);
+
+    const handleFilterOperatorChange = ({ target: { value } }) => setFilterOperator(value);
+    const handleFilterColumnChange = ({ target: { value } }) => setFilterColumn(value);
+    const handleFilterValueChange = ({ target: { value } }) => setFilterValue(value);
+
+    const onResetFiltersBtnClick = useCallback(() => {
+        _.isEmpty(filterValue) && setFilterMenuAnchorEl(null) || setFilterValue(null);
+    }, [filterValue]);
 
     return (
         <Paper sx={{ width: 510, height: 64, padding: '2px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -38,7 +38,7 @@ const List = () => {
                 <Select
                     id="filter-columns-select"
                     name="columns"
-                    options={FilterMenuHelper.makeOptionsFromObjects(columns, 'field', 'headerName')}
+                    options={FilterMenuHelper.makeOptionsFromObjects(fields)}
                     onChange={handleFilterColumnChange}
                     value={filterColumn}
                 />
@@ -73,7 +73,7 @@ const List = () => {
     );
 };
 
-const FilterMenu = () => {
+const FilterMenu = ({ fields }) => {
     const {
         filterMenuId,
         filterMenuAnchorEl,
@@ -93,7 +93,7 @@ const FilterMenu = () => {
             open={filterMenuOpen}
             anchorEl={filterMenuAnchorEl}
         >
-            <List/>
+            <List fields={fields}/>
         </ToggleMenu>
     );
 };

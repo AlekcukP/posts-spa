@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const Post = ({ row: { title, content, id, userId }, className }) => {
+const PostItem = ({ row: { title, content, id, userId }, className }) => {
     return (
         <Paper
             className={classnames(
@@ -28,4 +28,4 @@ const Post = ({ row: { title, content, id, userId }, className }) => {
     );
 };
 
-export default Post;
+export default PostItem;

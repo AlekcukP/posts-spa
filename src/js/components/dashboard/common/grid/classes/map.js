@@ -1,23 +1,23 @@
-class SortRules {
+class FilterRules {
     #rules;
 
     constructor() {
-        this.#rules = new Map();
+        this.#rules = new Immutable.Map();
     }
 
-    static create(field = null, order = null) {
-        const sortRules = new SortRules;
+    static create(field = null, filter = null) {
+        const rules = new FilterRules;
 
-        if (field && order) {
-            sortRules.add(field, order);
+        if (field && filter) {
+            rules.add(field, filter);
         }
 
-        return sortRules;
+        return rules;
     }
 
-    add(field, order) {
-        if (field && _.isString(field) && order && _.isString(order)) {
-            this.#rules.set(field, order);
+    add(field, filter) {
+        if (field && _.isString(field) && filter && _.isObject(filter) && !_.isEmpty(filter)) {
+            this.#rules.set(field, filter);
         }
 
         return this;
@@ -43,15 +43,15 @@ class SortRules {
 
     equal(field, value) {
         if (this.has(field)) {
-            return this.get(field) === value;
+            return _.isEqual(this.get(field), value);
         }
 
         return false;
     }
 
     toArray() {
-        return Array.from(this.#rules, ([key, value]) => ({ field: key, order: value }));
+        return Array.from(this.#rules, ([key, value]) => ({ field: key, ...value }));
     }
 }
 
-export default SortRules;
+export default FilterRules;

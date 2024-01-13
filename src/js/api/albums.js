@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
-import URL from "../../helpers/url";
+import URL from "../helpers/url";
 
 export const useGetAlbums = () => {
     const { data: albumRecords, error, isLoading } = useQuery({ queryKey: ['albums'], queryFn: async () => {
