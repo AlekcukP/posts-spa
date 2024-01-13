@@ -37,23 +37,6 @@ const filterRecordsByRule = (records, column, rule, compareValue) => {
     }
 }
 
-export const filterOperators = {
-    equal: '=',
-    notEqual: '!=',
-    above: '>',
-    aboveOrEqual: '>=',
-    less: '<',
-    lessOrEqual: '<=',
-    isEmpty: 'isEmpty',
-    isNotEmpty: 'isNotEmpty'
-}
-
-export const isOperatorRequireCompareValue = (rule) => _.includes(
-    [filterOperators.isEmpty, filterOperators.isNotEmpty],
-    rule
-);
-
-
 export const filterColumnsByType = (columns, type) => {
     return _.filter(columns, column => column.type === type)
 }

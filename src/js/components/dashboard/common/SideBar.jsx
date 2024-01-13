@@ -17,6 +17,8 @@ import { DashboardContext } from '../Dashboard';
 
 const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
+        height: '100%',
+        position: 'absolute',
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -32,7 +34,7 @@ const SideBarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
                 }),
-                width: theme.spacing(7),
+                width: theme.spacing(0),
                 [theme.breakpoints.up('sm')]: {
                     width: theme.spacing(9),
                 },

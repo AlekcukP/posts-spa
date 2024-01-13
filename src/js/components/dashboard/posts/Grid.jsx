@@ -3,9 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import _ from "lodash";
 import Post from "./Post";
 import Grid from "../common/grid/Grid";
-import EmptyDataOverlay from "../common/EmptyDataOverlay";
+import SortMenuHelper from "../common/grid/helpers/sort/menu";
 
-const cells = [
+const columns = [
     {
         field: 'id',
         headerName: 'ID',
@@ -24,7 +24,7 @@ const cells = [
         field: 'title',
         headerName: 'Title',
         type: 'string',
-        sortable: true,
+        sortable: false,
         filterable: false
     },
     {
@@ -41,22 +41,23 @@ const PostsGrid = ({ posts }) => {
 
     return (
         <Grid
-            cells={cells}
+            columns={columns}
             rows={posts}
             pageSizeOptions={[10, 25, 50, 100]}
             onFilterChange={() => {}}
-            Cell={Post}
+            cell={Post}
             initialState={{
                 pagination:  { page: 0, pageSize: 10 },
                 filter: {
-                    items: [
-                        { field: 'id', operator: 'equals', value: searchParams.get('id') },
-                        { field: 'userId', operator: 'equals', value: searchParams.get('userId') },
-                    ],
+                    // items: [
+                    //     { field: 'id', operator: 'equals', value: searchParams.get('id') },
+                    //     { field: 'userId', operator: 'equals', value: searchParams.get('userId') },
+                    // ],
+                    field: 'id',
+                    operator: 'equals',
+                    value: searchParams.get('id')
                 },
-            }}
-            slots={{
-                noRowsOverlay: EmptyDataOverlay,
+                sort: { field: 'id', order: SortMenuHelper.ORDERS.ASC }
             }}
         />
     );

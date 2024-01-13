@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 
 export const useSidebar = () => {
-    const [isSidebarOpen, setSidebarOpen] = useState(true);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const openSidebar = () => setSidebarOpen(true);
 

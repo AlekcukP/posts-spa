@@ -62,7 +62,7 @@ const AlbumsTable = ({ rows }) => {
 
     return (
             <Table
-                className="h-5/6"
+                className="h-[72vh] lg:h-[75vh]"
                 rows={rows}
                 columns={memoColumns}
                 pageSizeOptions={[5, 10, 15]}

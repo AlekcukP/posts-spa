@@ -9,14 +9,14 @@ const Card = ({ title, subheader, isLoading, error, children }) => {
     if (isLoading) return <Spinner />;
 
     return (
-        <MuiCard className="h-full">
+        <MuiCard className='h-full'>
             <CardHeader
                 title={title}
                 subheader={subheader}
-                className="py-3"
+                className="py-2"
             />
 
-            <CardContent className="h-full py-2">
+            <CardContent className="py-1 h-full">
                 { children }
             </CardContent>
 

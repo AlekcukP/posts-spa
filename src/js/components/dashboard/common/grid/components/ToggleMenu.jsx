@@ -3,38 +3,28 @@ import _ from "lodash";
 import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
-import Menu from '@mui/material/Menu';
 import { ClickAwayListener } from '@mui/base';
 
-const TogglePopup = ({ id, isOpen, anchorEl, children, labelledby }) => {
+const TogglePopup = ({ children, id, open, anchorEl, onClose }) => {
     return (
         <Popover
             id={id}
-            open={isOpen}
+            open={open}
             anchorEl={anchorEl}
-            sx={{width: 240}}
-            // popperOptions={{placement: 'bottom-start'}}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-            }}
-            aria-labelledby={labelledby}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            onClose={onClose}
         >
             { children }
         </Popover>
     );
 };
 
-const ToggleButton = ({ icon: Icon, onClick, isOpen, controls, describedby, name, id }) => {
+const ToggleButton = ({ icon: Icon, onClick, describedby, name }) => {
     return (
         <Button
-            id={id}
-            aria-controls={isOpen ? controls : undefined}
-            aria-describedby={describedby}
-            aria-expanded={isOpen ? 'true' : undefined}
-            aria-haspopup="true"
-            onClick={onClick}
             variant="text"
+            aria-describedby={describedby}
+            onClick={onClick}
             startIcon={<Icon />}
         >
             { name }
@@ -42,16 +32,27 @@ const ToggleButton = ({ icon: Icon, onClick, isOpen, controls, describedby, name
     );
 }
 
-const ToggleMenu = ({ button: Button, popup: Popup, onClickAway }) => {
+const ToggleMenu = ({
+    icon: Icon,
+    id,
+    name,
+    onClick,
+    onClickAway,
+    onClose,
+    open,
+    anchorEl,
+    children
+}) => {
     return (
         <ClickAwayListener onClickAway={onClickAway}>
             <Box>
-                <Button />
-                <Popup />
+                <ToggleButton icon={Icon} onClick={onClick} name={name} describedby={id}/>
+                <TogglePopup id={id} open={open} anchorEl={anchorEl} onClose={onClose}>
+                    { children }
+                </TogglePopup>
             </Box>
         </ClickAwayListener>
     );
 }
 
-export { ToggleButton, TogglePopup };
 export default ToggleMenu;

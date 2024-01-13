@@ -11,7 +11,7 @@ const DashboardContext = createContext(null);
 const Dashboard = () => {
     return (
         <DashboardContext.Provider value={{ ...useSidebar() }}>
-            <Box className="flex h-full">
+            <Box className="flex flex-col bg-gray-100 h-full w-full md:w-auto">
                 <NavBar />
                 <SideBar />
                 <Page>

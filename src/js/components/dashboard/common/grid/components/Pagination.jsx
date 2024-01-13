@@ -11,15 +11,16 @@ const Pagination = () => {
         handleChangePage,
         handleChangeRowsPerPage
     } = useContext(Context);
+
     return (
         <TablePagination
+            className="grid-pagination flex items-center min-h-12 w-full justify-center md:justify-end bg-white "
             component="div"
             count={count}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            className="flex items-center self-end min-h-[53px]"
         />
     );
 }
