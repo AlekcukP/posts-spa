@@ -2,11 +2,12 @@ import React, { useMemo } from "react";
 import _ from "lodash";
 import Card from "./common/Card";
 import Table from "./common/Table";
-import { useGetUsers } from "../../api/users";
 import { LinkCell } from "./common/Table";
 import { getGridStringOperators } from "@mui/x-data-grid";
 import ColumnsList from "../../classes/columnsList";
-import { useQueryParams } from "./common/grid/hooks/useQueryParams";
+import { useQueryParams } from "./hooks/useQueryParams";
+import { useGetData } from "./hooks/useGetData";
+import { useInitialState } from "./hooks/useInitialState";
 
 const columns = ColumnsList.from([
     {
@@ -83,8 +84,9 @@ const columns = ColumnsList.from([
 ]);
 
 const UsersContent = () => {
-    const { userRecords, error, isLoading } = useGetUsers();
-    const { searchParams, omitSearchParams, mergeSearchParams } = useQueryParams();
+    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams();
+    const { data, error, isLoading } = useGetData('users');
+    const initialState = useInitialState();
 
     const memoColumns = useMemo(
         () => columns.map(column => {
@@ -96,43 +98,6 @@ const UsersContent = () => {
             } : column;
         }).toArray(), []);
 
-        const handleFilterChange = filterModel => {
-            console.log(filterModel);
-            omitSearchParams(columns.getFilterableFields());
-
-            if (filterModel?.items?.length) {
-                const { field, value } = _.first(filterModel.items);
-
-                mergeSearchParams(
-                    field && value ? { [field]: value } : {}
-                );
-            }
-
-            return filterModel;
-        }
-
-        const handleSortChange = sortModel => {
-            omitSearchParams(['field', 'sort']);
-
-            if (!_.isEmpty(sortModel)) {
-                const { field, sort } = _.first(sortModel);
-
-                mergeSearchParams(
-                    field && sort ? { field, sort } : {}
-                );
-            }
-
-            return sortModel;
-        }
-
-        const handlePaginationChange = ({ page, pageSize }) => {
-            omitSearchParams(['page', 'pageSize']);
-
-            if (_.isInteger(page) && _.isInteger(pageSize)) mergeSearchParams({ page, pageSize });
-
-            return { page, pageSize };
-        }
-
     return (
         <Card
             title={"Users List"}
@@ -142,31 +107,14 @@ const UsersContent = () => {
         >
             <Table
                 className="h-[72vh] lg:h-[75vh]"
-                rows={userRecords}
+                rows={data}
                 columns={memoColumns}
                 pageSizeOptions={[5, 10, 15]}
-                onFilterModelChange={handleFilterChange}
-                onSortModelChange={handleSortChange}
-                onPaginationModelChange={handlePaginationChange}
+                onFilterModelChange={updateFilterSearchParams}
+                onSortModelChange={updateSortSearchParams}
+                onPaginationModelChange={updatePaginationSearchParams}
                 disableMultipleColumnsFiltering={false}
-                initialState={{
-                    pagination: {
-                        paginationModel: { page: searchParams.get('page') ?? 0, pageSize: searchParams.get('pageSize') ?? 10 },
-                    },
-                    filter: {
-                        filterModel: {
-                            items: [
-                                { field: 'id', operator: 'equals', value: searchParams.get('id') },
-                                { field: 'userId', operator: 'equals', value: searchParams.get('userId') },
-                            ],
-                        },
-                    },
-                    sorting: {
-                        sortModel: [
-                            { field: searchParams.get('field'), sort: searchParams.get('sort') }
-                        ],
-                    },
-                }}
+                initialState={initialState}
             />
         </Card>
     );

@@ -7,7 +7,7 @@ import EmptyDataOverlay from "../../EmptyDataOverlay";
 import ComponentsHelper from "../../../../../helpers/components";
 
 const Stack = ({ cell: Cell, rows }) => {
-    if (!rows.length) {
+    if (!rows?.length) {
         return <EmptyDataOverlay />;
     }
 

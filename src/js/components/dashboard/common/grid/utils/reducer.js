@@ -2,27 +2,17 @@ import _ from "lodash";
 
 export default function reducer(state, action) {
     switch (action.type) {
-        case 'sort_change': {
-            const sortRules = _.merge(state.sorting.sortModel, action.sortModel);
-            const sortModel = _.filter(sortRules, (obj) => _.some(obj, (value) => !_.isNil(value)));
-
+        case 'sort_model_change': {
             return {
                 ...state,
-                sorting: { sortModel }
+                sorting: { sortModel: [...action.sortModel] }
             };
         };
 
-        case 'page_change': {
+        case 'pagination_model_change': {
             return {
                 ...state,
-                pagination: { ...action.paginationModel },
-            };
-        }
-
-        case 'page_size_change': {
-            return {
-                ...state,
-                pagination: { ...action.paginationModel },
+                pagination: { paginationModel: { ...action.paginationModel } },
             };
         }
 

@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import _ from "lodash";
 import classnames from "tailwindcss-classnames";
 import Box from "@mui/material/Box";
@@ -8,12 +8,7 @@ import Stack from "./components/Stack";
 import SortMenu from "./components/SortMenu";
 import FilterMenu from "./components/FilterMenu";
 import reducer from "./utils/reducer";
-
-const defaultState = {
-    pagination: { page: 0, pageSize: 10 },
-    filter: { items: [] },
-    sorting: { sortModel: [{ field: null, sort: null }] }
-}
+import { usePipe } from "../../hooks/usePipe";
 
 const Grid = ({
     columns,
@@ -25,33 +20,45 @@ const Grid = ({
     onSortModelChange,
     onPaginationModelChange
 }) => {
-    const [state, dispatch] = useReducer(reducer, {...defaultState, ...initialState});
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const pipe = usePipe();
 
     const {
-        pagination: { page, pageSize },
+        pagination: { paginationModel: { page, pageSize } },
         filter: { items },
-        sorting: { sortModel: [firstSortModel] },
+        sorting: { sortModel: [sortModelItem] },
     } = state;
 
-    const handleSortRuleChange = (sortModel) => dispatch({
-        type: 'sort_change',
-        sortModel: onSortModelChange(sortModel)
-    });
+    const handleSortModelChange = pipe(
+        onSortModelChange,
+        (sortModel) => dispatch({type: 'sort_model_change', sortModel})
+    );
 
-    const handleChangePage = (e, page) => {
+    const handlePageChange = (e, page) => {
         dispatch({
-            type: 'page_change',
+            type: 'pagination_model_change',
             paginationModel: onPaginationModelChange({ page, pageSize })
         })
     }
+
     const handlePageSizeChange = ({ target: { value } }) => {
         dispatch({
-            type: 'page_size_change',
+            type: 'pagination_model_change',
             paginationModel: onPaginationModelChange({ page: 0, pageSize: parseInt(value, 10) })
+        });
+
+    };
+
+    const handleFilterModelChange = (filterModel) => {
+        dispatch({
+            type: 'filter_model_change',
+            filterModel: onFilterModelChange(filterModel)
         });
     };
 
-    const sortedRows = _.orderBy(rows, [firstSortModel.field], [firstSortModel.sort])
+    const sortedRows = _.orderBy(rows, [sortModelItem.field], [sortModelItem.sort]);
+    const chunkedRows = _.chunk(sortedRows, pageSize);
+    const pageRows = _.nth(chunkedRows, page);
 
     return (
         <Box className={classnames(
@@ -61,7 +68,8 @@ const Grid = ({
                 "border-[1px]",
                 "border-gray-300",
                 "border-solid",
-                "rounded items-center",
+                "rounded",
+                "items-center",
                 "w-full",
                 "basis-full",
                 "h-[72vh]",
@@ -70,19 +78,19 @@ const Grid = ({
             className
         )}>
             <Box className="py-1 px-2 self-start flex w-full">
-                { columns.hasSortableFields() && <SortMenu
+                <SortMenu
                     fields={columns.getSortableFields()}
-                    selected={firstSortModel}
-                    onSortModelChange={handleSortRuleChange}
-                /> }
-                { columns.hasFilterableFields() && <FilterMenu
+                    selected={sortModelItem}
+                    onSortModelChange={handleSortModelChange}
+                />
+                <FilterMenu
                     fields={columns.getFilterableFields()}
-                /> }
+                />
             </Box>
 
             <Divider variant="fullWidth" flexItem />
 
-            <Stack rows={sortedRows} cell={cell} />
+            <Stack rows={pageRows} cell={cell} />
 
             <Divider variant="fullWidth" flexItem />
 
@@ -92,7 +100,7 @@ const Grid = ({
                 count={rows.length}
                 page={page}
                 rowsPerPage={pageSize}
-                onPageChange={handleChangePage}
+                onPageChange={handlePageChange}
                 onRowsPerPageChange={handlePageSizeChange}
             />
         </Box>
