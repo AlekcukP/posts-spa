@@ -46,7 +46,7 @@ const PostsContent = () => {
         updateSortSearchParams
     } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('posts');
-    const initialState = useInitialState();
+    const initialState = useInitialState(columns.getFilterableFields());
 
     return (
         <Card

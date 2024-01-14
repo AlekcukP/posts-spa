@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useId } from "react";
 
-export const useControls = () => {
+export const useFilterSortControls = () => {
     const [sortMenuAnchorEl, setSortMenuAnchorEl] = useState(null);
     const [filterMenuAnchorEl, setFilterMenuAnchorEl] = useState(null);
     const filterMenuOpen = Boolean(filterMenuAnchorEl);

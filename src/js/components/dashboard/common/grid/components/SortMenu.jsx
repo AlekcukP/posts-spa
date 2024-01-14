@@ -10,17 +10,17 @@ import SouthIcon from '@mui/icons-material/South';
 import SortIcon from '@mui/icons-material/Sort';
 import Divider from '@mui/material/Divider';
 import ToggleMenu from "./ToggleMenu";
-import SortMenuHelper from "../helpers/sort/menu";
+import SortHelper from "../../../../../helpers/sort";
 import ComponentsHelper from "../../../../../helpers/components";
-import { useControls } from "../hooks/useControls";
+import { useFilterSortControls } from "../hooks/useFilterSortControls";
 
 const ListItem = ({ order, name, selected, onClick }) => {
     return (
         <MenuItem selected={selected} onClick={onClick}>
             <ListItemIcon>
-                { SortMenuHelper.isOrderAsc(order) ? <NorthIcon /> : <SouthIcon /> }
+                { SortHelper.isAsc(order) ? <NorthIcon /> : <SouthIcon /> }
             </ListItemIcon>
-            <ListItemText primary={SortMenuHelper.getSortMenuItemSign(order, name)} />
+            <ListItemText primary={SortHelper.getMenuItemSign(order, name)} />
         </MenuItem>
     );
 }
@@ -29,7 +29,7 @@ const List = ({ fields, selected, handleSortModelChange }) => {
     const menuItems = _.map(fields, (field, index) => (
         <Fragment key={ComponentsHelper.generateKey('MenuList')}>
             <MenuList>
-                { _.map(_.values(SortMenuHelper.ORDERS), order => (
+                { _.map(_.values(SortHelper.ORDERS), order => (
                     <ListItem
                         key={ComponentsHelper.generateKey('MenuItem')}
                         order={order}
@@ -55,7 +55,7 @@ const SortMenu = (props) => {
         sortMenuOpen,
         handleSortMenuBtnClick,
         closeSortMenu
-    } = useControls();
+    } = useFilterSortControls();
 
     return (
         <ToggleMenu

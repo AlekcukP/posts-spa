@@ -9,12 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import Select from "../../forms/Select";
 import ToggleMenu from "./ToggleMenu";
-import FilterMenuHelper from "../helpers/filter/menu";
-import { useControls } from "../hooks/useControls";
+import FilterHelper from "../../../../../helpers/filter";
+import { makeSelectOptionsFromOperators, makeSelectOptionsFromFields } from "../../forms/Select";
+import { useFilterSortControls } from "../hooks/useFilterSortControls";
 
 const List = ({ handleFilterChange, onResetBtnClick, fields, selected: { field, operator, value } }) => {
     return (
-        <Paper sx={{ width: 510, height: 64, padding: '2px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Paper className="grid-filter-box">
             <Box
                 component="form"
                 autoComplete="off"
@@ -24,37 +25,32 @@ const List = ({ handleFilterChange, onResetBtnClick, fields, selected: { field, 
                     <ClearIcon />
                 </IconButton>
                 <Select
-                    id="filter-columns-select"
+                    id="filter-fields-select"
                     name="field"
-                    options={FilterMenuHelper.makeOptionsFromObjects(fields)}
+                    options={makeSelectOptionsFromFields(fields)}
                     onChange={handleFilterChange}
                     value={field}
                 />
                 <Select
                     id="filter-operators-select"
                     name="operator"
-                    options={FilterMenuHelper.makeOptionsFromEntries(FilterMenuHelper.OPERATORS)}
+                    options={makeSelectOptionsFromOperators(FilterHelper.OPERATORS)}
                     onChange={handleFilterChange}
                     value={operator}
                 />
                 <FormControl fullWidth>
                     <TextField
-                        id="filter-input-field"
+                        id="filter-value-field"
                         label="Value"
                         name="value"
                         type="number"
                         variant="standard"
                         placeholder="Filter value"
                         fullWidth={true}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                        InputLabelProps={{ shrink: true }}
                         value={value}
                         onChange={handleFilterChange}
-                        disabled={FilterMenuHelper.isOperatorRequireCompareValue(
-                            FilterMenuHelper.OPERATORS,
-                            operator
-                        )}
+                        disabled={!FilterHelper.needsComparableValue(operator)}
                     />
                 </FormControl>
             </Box>
@@ -69,7 +65,7 @@ const FilterMenu = ({ fields, selected, handleFilterModelChange }) => {
         filterMenuOpen,
         handleFilterMenuBtnClick,
         closeFilterMenu
-    } = useControls();
+    } = useFilterSortControls();
 
     const handleFilterChange = ({ target: { value, name } }) => handleFilterModelChange(
         { ...selected, [name]: value }

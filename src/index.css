@@ -11,6 +11,16 @@ body {
     background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 }
 
+.grid-filter-box {
+    width: 510px;
+    height: 64px;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .grid-pagination div,
 .grid-pagination p {
     @apply mx-auto md:mx-0 md:px-2 md:ml-auto overflow-hidden;

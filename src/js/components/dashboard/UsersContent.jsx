@@ -3,8 +3,8 @@ import _ from "lodash";
 import Card from "./common/Card";
 import Table from "./common/Table";
 import { LinkCell } from "./common/Table";
-import { getGridStringOperators } from "@mui/x-data-grid";
 import ColumnsList from "../../classes/columnsList";
+import { getGridNumericOperators } from "@mui/x-data-grid";
 import { useQueryParams } from "./hooks/useQueryParams";
 import { useGetData } from "./hooks/useGetData";
 import { useInitialState } from "./hooks/useInitialState";
@@ -15,7 +15,8 @@ const columns = ColumnsList.from([
         headerName: 'ID',
         width: 70,
         sortable: true,
-        filterable: true
+        filterable: true,
+        type: 'number'
 },
     {
         field: 'username',
@@ -71,6 +72,7 @@ const columns = ColumnsList.from([
         width: 80,
         sortable: false,
         filterable: false,
+        type: 'actions',
         renderCell: params => <LinkCell to={`/posts?userId=${params.id}`}/>
     },
     {
@@ -79,6 +81,7 @@ const columns = ColumnsList.from([
         width: 80,
         sortable: false,
         filterable: false,
+        type: 'actions',
         renderCell: params => <LinkCell to={`/albums?userId=${params.id}`}/>
     }
 ]);
@@ -90,14 +93,14 @@ const UsersContent = () => {
         updateSortSearchParams
     } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('users');
-    const initialState = useInitialState();
+    const initialState = useInitialState(columns.getFilterableFields());
 
     const memoColumns = useMemo(
         () => columns.map(column => {
             return column.filterable ? {
                 ...column,
-                filterOperators: getGridStringOperators()
-                    .filter(operator => operator.value === 'equals')
+                filterOperators: getGridNumericOperators()
+                    .filter(operator => operator.value === '=')
                     .map(operator => ({ ...operator }))
             } : column;
         }).toArray(), []);

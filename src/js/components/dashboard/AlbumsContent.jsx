@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import Card from "./common/Card";
 import Table from "./common/Table";
 import ColumnsList from "../../classes/columnsList";
-import { getGridStringOperators } from "@mui/x-data-grid";
+import { getGridNumericOperators } from "@mui/x-data-grid";
 import { useQueryParams } from "./hooks/useQueryParams";
 import { useGetData } from "./hooks/useGetData";
 import { useInitialState } from "./hooks/useInitialState";
@@ -13,14 +13,16 @@ const columns = ColumnsList.from([
         headerName: 'ID',
         width: 320,
         sortable: true,
-        filterable: true
+        filterable: true,
+        type: 'number'
     },
     {
         field: 'userId',
         headerName: 'User ID',
         width: 320,
         sortable: true,
-        filterable: true
+        filterable: true,
+        type: 'number'
     },
     {
         field: 'title',
@@ -38,14 +40,14 @@ const AlbumsContent = () => {
         updateSortSearchParams
     } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('albums');
-    const initialState = useInitialState();
+    const initialState = useInitialState(columns.getFilterableFields());
 
     const memoColumns = useMemo(
         () => columns.map(column => {
             return column.filterable ? {
                 ...column,
-                filterOperators: getGridStringOperators()
-                    .filter(operator => operator.value === 'equals')
+                filterOperators: getGridNumericOperators()
+                    .filter(operator => operator.value === '=')
                     .map(operator => ({ ...operator }))
             } : column;
         }).toArray(), []);

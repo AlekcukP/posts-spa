@@ -1,21 +1,23 @@
-import { useQueryParams } from "./useQueryParams"
+import _ from "lodash";
+import { useQueryParams } from "./useQueryParams";
 
-export const useInitialState = () => {
-    const { searchParams } = useQueryParams();
+export const useInitialState = (filterableFields) => {
+    const { getSearchParam, searchParamPresent } = useQueryParams();
 
-    const filterItems = [
-        { field: 'id', operator: '=', value: _.toNumber(searchParams.get('id')) },
-        { field: 'userId', operator: '=', value: _.toNumber(searchParams.get('userId')) }
-    ].filter(item => item.value);
+    const filterItems = [];
+    _.each(
+        filterableFields,
+        field => searchParamPresent(field) && filterItems.push({ field, operator: '=', value: getSearchParam(field) })
+    )
 
     return {
         pagination: { paginationModel: {
-            page: _.toNumber(searchParams.get('page')),
-            pageSize: _.toNumber(searchParams.get('pageSize')) || 10
+            page: getSearchParam('page', true, 0),
+            pageSize: getSearchParam('pageSize', true, 10)
         }},
-        filter: { filterModel: { items: filterItems } },
+        filter: { filterModel: { items: filterItems }},
         sorting: { sortModel: [
-            { field: searchParams.get('field'), sort: searchParams.get('sort') }
+            { field: getSearchParam('field', false), sort: getSearchParam('sort', false) }
         ]}
     }
 }

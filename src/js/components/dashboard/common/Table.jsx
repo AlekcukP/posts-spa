@@ -13,6 +13,7 @@ const LinkCell = ({ to }) => {
 }
 
 const Table = ({ rows, columns, ...props }) => {
+
     return (
         <DataGrid
             rows={rows}

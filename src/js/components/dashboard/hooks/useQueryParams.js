@@ -4,6 +4,15 @@ import { useSearchParams } from "react-router-dom";
 export const useQueryParams = (filterableFields) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const searchParamPresent = key => searchParams.has(key);
+
+    const getSearchParam = (key, isInt = true, defaultValue = undefined) => {
+        if (!searchParamPresent(key)) return defaultValue;
+        if (isInt) return _.toInteger(searchParams.get(key));
+
+        return searchParams.get(key);
+    }
+
     const updateFilterSearchParams = filterModel => {
         _.each(filterableFields, key => searchParams.delete(key));
 
@@ -57,6 +66,8 @@ export const useQueryParams = (filterableFields) => {
         ...memoValues,
         updateFilterSearchParams,
         updatePaginationSearchParams,
-        updateSortSearchParams
+        updateSortSearchParams,
+        getSearchParam,
+        searchParamPresent
     };
 }
