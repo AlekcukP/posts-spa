@@ -9,11 +9,10 @@ export const useInitialState = () => {
             pageSize: _.toNumber(searchParams.get('pageSize')) || 10
         }},
         filter: { filterModel: { items: [
-            { field: 'id', operator: 'equals', value: searchParams.get('id') },
-            { field: 'userId', operator: 'equals', value: searchParams.get('userId') },
+            { field: 'id', operator: 'equals', value: _.toNumber(searchParams.get('id')) }
         ]}},
         sorting: { sortModel: [
             { field: searchParams.get('field'), sort: searchParams.get('sort') }
-        ]},
+        ]}
     }
 }

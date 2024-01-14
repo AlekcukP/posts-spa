@@ -32,7 +32,11 @@ const columns = ColumnsList.from([
 ]);
 
 const AlbumsContent = () => {
-    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams(columns.getFilterableFields());
+    const {
+        updateFilterSearchParams,
+        updatePaginationSearchParams,
+        updateSortSearchParams
+    } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('albums');
     const initialState = useInitialState();
 

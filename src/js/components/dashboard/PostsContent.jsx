@@ -40,7 +40,11 @@ const columns = ColumnsList.from([
 ]);
 
 const PostsContent = () => {
-    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams(columns.getFilterableFields());
+    const {
+        updateFilterSearchParams,
+        updatePaginationSearchParams,
+        updateSortSearchParams
+    } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('posts');
     const initialState = useInitialState();
 
