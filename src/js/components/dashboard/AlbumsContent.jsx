@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import Card from "./common/Card";
 import Table from "./common/Table";
 import ColumnsList from "../../classes/columnsList";
-import { useGetAlbums } from "../../api/albums";
 import { getGridStringOperators } from "@mui/x-data-grid";
 import { useQueryParams } from "./hooks/useQueryParams";
 import { useGetData } from "./hooks/useGetData";
