@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const useQueryParams = () => {
+export const useQueryParams = (filterableFields) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
@@ -10,7 +10,7 @@ export const useQueryParams = () => {
     const mergeSearchParams = params => updateSearchParams({ ...searchParamsObj, ...params });
 
     const updateFilterSearchParams = filterModel => {
-        omitSearchParams(columns.getFilterableFields());
+        omitSearchParams(filterableFields);
 
         if (filterModel?.items?.length) {
             const { field, value } = _.first(filterModel.items);

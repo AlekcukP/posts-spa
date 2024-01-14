@@ -32,7 +32,7 @@ const columns = ColumnsList.from([
 ]);
 
 const AlbumsContent = () => {
-    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams();
+    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('albums');
     const initialState = useInitialState();
 
@@ -61,7 +61,6 @@ const AlbumsContent = () => {
                 onFilterModelChange={updateFilterSearchParams}
                 onSortModelChange={updateSortSearchParams}
                 onPaginationModelChange={updatePaginationSearchParams}
-                disableMultipleColumnsFiltering={false}
                 initialState={initialState}
             />
         </Card>

@@ -84,7 +84,7 @@ const columns = ColumnsList.from([
 ]);
 
 const UsersContent = () => {
-    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams();
+    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('users');
     const initialState = useInitialState();
 
@@ -113,7 +113,6 @@ const UsersContent = () => {
                 onFilterModelChange={updateFilterSearchParams}
                 onSortModelChange={updateSortSearchParams}
                 onPaginationModelChange={updatePaginationSearchParams}
-                disableMultipleColumnsFiltering={false}
                 initialState={initialState}
             />
         </Card>
