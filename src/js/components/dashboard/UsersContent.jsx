@@ -84,7 +84,11 @@ const columns = ColumnsList.from([
 ]);
 
 const UsersContent = () => {
-    const { updateFilterSearchParams, updatePaginationSearchParams, updateSortSearchParams } = useQueryParams(columns.getFilterableFields());
+    const {
+        updateFilterSearchParams,
+        updatePaginationSearchParams,
+        updateSortSearchParams
+    } = useQueryParams(columns.getFilterableFields());
     const { data, error, isLoading } = useGetData('users');
     const initialState = useInitialState();
 

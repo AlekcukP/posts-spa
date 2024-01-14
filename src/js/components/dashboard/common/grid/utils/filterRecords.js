@@ -1,4 +1,5 @@
 import _ from "lodash";
+import FilterMenuHelper from "../helpers/filter/menu";
 
 const normalizeValue = (compareValue) => {
     if (_.isNumber(+compareValue) && !_.isNaN(+compareValue)) {
@@ -12,39 +13,40 @@ const normalizeValue = (compareValue) => {
     return null;
 }
 
-const filterRecordsByRule = (records, column, rule, compareValue) => {
-    const normalizedCompareValue = normalizeValue(compareValue);
+const filterRecordsByRule = (records, field, operator, value) => {
+    const normalizedCompareValue = normalizeValue(value);
 
-    switch (rule) {
-        case filterOperators.equal:
-            return _.filter(records, record => normalizeValue(record[column]) === normalizedCompareValue);
-        case filterOperators.notEqual:
-            return _.filter(records, record => normalizeValue(record[column]) !== normalizedCompareValue);
-        case filterOperators.above:
-            return _.filter(records, record => normalizeValue(record[column]) > normalizedCompareValue);
-        case filterOperators.aboveOrEqual:
-            return _.filter(records, record => normalizeValue(record[column]) >= normalizedCompareValue);
-        case filterOperators.less:
-            return _.filter(records, record => normalizeValue(record[column]) < normalizedCompareValue);
-        case filterOperators.lessOrEqual:
-            return _.filter(records, record => normalizeValue(record[column]) <= normalizedCompareValue);
-        case filterOperators.isEmpty:
-            return _.filter(records, record => _.isEmpty(normalizeValue(record[column])));
-        case filterOperators.isNotEmpty:
-            return _.filter(records, record => !_.isEmpty(normalizeValue(record[column])));
+    switch (operator) {
+        case FilterMenuHelper.OPERATORS.equal:
+            return _.filter(records, record => normalizeValue(record[field]) === normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.notEqual:
+            return _.filter(records, record => normalizeValue(record[field]) !== normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.above:
+            return _.filter(records, record => normalizeValue(record[field]) > normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.aboveOrEqual:
+            return _.filter(records, record => normalizeValue(record[field]) >= normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.less:
+            return _.filter(records, record => normalizeValue(record[field]) < normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.lessOrEqual:
+            return _.filter(records, record => normalizeValue(record[field]) <= normalizedCompareValue);
+        case FilterMenuHelper.OPERATORS.isEmpty:
+            return _.filter(records, record => _.isEmpty(normalizeValue(record[field])));
+        case FilterMenuHelper.OPERATORS.isNotEmpty:
+            return _.filter(records, record => !_.isEmpty(normalizeValue(record[field])));
         default:
             return records;
     }
 }
 
 export const filterColumnsByType = (columns, type) => {
-    return _.filter(columns, column => column.type === type)
+    return _.filter(columns, column => column.type === type);
 }
 
-export const filterRecords = (records, column, rule, compareValue) => {
-    if (_.isEmpty(compareValue) && !isOperatorRequireCompareValue(rule)) {
+export const filterRecords = (records, { field, operator, value }) => {
+    console.log(!FilterMenuHelper.isOperatorRequireCompareValue(operator))
+    if (!value && !FilterMenuHelper.isOperatorRequireCompareValue(operator)) {
         return records;
     }
 
-    return filterRecordsByRule(records, column, rule, compareValue);
+    return filterRecordsByRule(records, field, operator, value);
 }

@@ -1,4 +1,3 @@
-export const usePipe = () => {
-    return (...functions) => (initialValue) =>
-    functions.reduce((value, func) => func(value), initialValue);
-}
+export const usePipe = () => (...functions) =>
+    (initialValue, extraParam = null) => functions.reduce((value, func) => func(value, extraParam), initialValue);
+

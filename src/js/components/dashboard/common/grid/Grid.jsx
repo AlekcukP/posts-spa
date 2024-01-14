@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import _ from "lodash";
 import classnames from "tailwindcss-classnames";
 import Box from "@mui/material/Box";
@@ -9,6 +9,7 @@ import SortMenu from "./components/SortMenu";
 import FilterMenu from "./components/FilterMenu";
 import reducer from "./utils/reducer";
 import { usePipe } from "../../hooks/usePipe";
+import { filterRecords } from "./utils/filterRecords";
 
 const Grid = ({
     columns,
@@ -25,7 +26,7 @@ const Grid = ({
 
     const {
         pagination: { paginationModel: { page, pageSize } },
-        filter: { items },
+        filter: { filterModel: { items: [filterModelItem] } },
         sorting: { sortModel: [sortModelItem] },
     } = state;
 
@@ -34,31 +35,32 @@ const Grid = ({
         (sortModel) => dispatch({type: 'sort_model_change', sortModel})
     );
 
-    const handlePageChange = (e, page) => {
-        dispatch({
-            type: 'pagination_model_change',
-            paginationModel: onPaginationModelChange({ page, pageSize })
-        })
-    }
+    const handlePageChange = pipe(
+        (e, page) => ({ page, pageSize: state.pagination.paginationModel.pageSize }),
+        onPaginationModelChange,
+        paginationModel => dispatch({ type: 'pagination_model_change', paginationModel })
+    );
 
-    const handlePageSizeChange = ({ target: { value } }) => {
-        dispatch({
-            type: 'pagination_model_change',
-            paginationModel: onPaginationModelChange({ page: 0, pageSize: parseInt(value, 10) })
-        });
+    const handlePageSizeChange = pipe(
+        ({ target: { value } }) => ({ page: 0, pageSize: parseInt(value, 10) }),
+        onPaginationModelChange,
+        paginationModel => dispatch({ type: 'pagination_model_change', paginationModel })
+    );
 
-    };
+    const handleFilterModelChange = pipe(
+        (filterModelItem) => ({ items: [filterModelItem] }),
+        onFilterModelChange,
+        (filterModel) => dispatch({type: 'filter_model_change', filterModel})
+    );
 
-    const handleFilterModelChange = (filterModel) => {
-        dispatch({
-            type: 'filter_model_change',
-            filterModel: onFilterModelChange(filterModel)
-        });
-    };
+    const processRows = pipe(
+        rows => filterRecords(rows, filterModelItem),
+        rows => _.orderBy(rows, [sortModelItem.field], [sortModelItem.sort]),
+        rows => _.chunk(rows, pageSize),
+        rows => _.nth(rows, page)
+    );
 
-    const sortedRows = _.orderBy(rows, [sortModelItem.field], [sortModelItem.sort]);
-    const chunkedRows = _.chunk(sortedRows, pageSize);
-    const pageRows = _.nth(chunkedRows, page);
+    const processedRows = processRows(rows);
 
     return (
         <Box className={classnames(
@@ -81,16 +83,18 @@ const Grid = ({
                 <SortMenu
                     fields={columns.getSortableFields()}
                     selected={sortModelItem}
-                    onSortModelChange={handleSortModelChange}
+                    handleSortModelChange={handleSortModelChange}
                 />
                 <FilterMenu
                     fields={columns.getFilterableFields()}
+                    selected={filterModelItem}
+                    handleFilterModelChange={handleFilterModelChange}
                 />
             </Box>
 
             <Divider variant="fullWidth" flexItem />
 
-            <Stack rows={pageRows} cell={cell} />
+            <Stack rows={processedRows} cell={cell} />
 
             <Divider variant="fullWidth" flexItem />
 

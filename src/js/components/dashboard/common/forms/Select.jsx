@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
 import ComponentsHelper from "../../../../helpers/components";
 
-const Select = ({ onChange, id, value, options, name, ...props }) => {
+const Select = ({ onChange, id, value, options, name, ref, ...props }) => {
     return (
         <FormControl fullWidth {...props}>
             <InputLabel variant="standard" htmlFor={id}>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import _ from "lodash";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -12,19 +12,7 @@ import ToggleMenu from "./ToggleMenu";
 import FilterMenuHelper from "../helpers/filter/menu";
 import { useControls } from "../hooks/useControls";
 
-const List = ({ fields }) => {
-    const [filterColumn, setFilterColumn] = useState(null);
-    const [filterOperator, setFilterOperator] = useState(null);
-    const [filterValue, setFilterValue] = useState(null);
-
-    const handleFilterOperatorChange = ({ target: { value } }) => setFilterOperator(value);
-    const handleFilterColumnChange = ({ target: { value } }) => setFilterColumn(value);
-    const handleFilterValueChange = ({ target: { value } }) => setFilterValue(value);
-
-    const onResetFiltersBtnClick = useCallback(() => {
-        _.isEmpty(filterValue) && setFilterMenuAnchorEl(null) || setFilterValue(null);
-    }, [filterValue]);
-
+const List = ({ handleFilterChange, onResetBtnClick, fields, selected: { field, operator, value } }) => {
     return (
         <Paper sx={{ width: 510, height: 64, padding: '2px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box
@@ -32,27 +20,28 @@ const List = ({ fields }) => {
                 autoComplete="off"
                 sx={{ display: 'flex', flexFlow: 'row', width: '100%', padding: '0 2px' }}
             >
-                <IconButton sx={{ width: 50 }} onClick={onResetFiltersBtnClick}>
+                <IconButton sx={{ width: 50 }} onClick={onResetBtnClick}>
                     <ClearIcon />
                 </IconButton>
                 <Select
                     id="filter-columns-select"
-                    name="columns"
+                    name="field"
                     options={FilterMenuHelper.makeOptionsFromObjects(fields)}
-                    onChange={handleFilterColumnChange}
-                    value={filterColumn}
+                    onChange={handleFilterChange}
+                    value={field}
                 />
                 <Select
                     id="filter-operators-select"
-                    name="operators"
+                    name="operator"
                     options={FilterMenuHelper.makeOptionsFromEntries(FilterMenuHelper.OPERATORS)}
-                    onChange={handleFilterOperatorChange}
-                    value={filterOperator}
+                    onChange={handleFilterChange}
+                    value={operator}
                 />
                 <FormControl fullWidth>
                     <TextField
                         id="filter-input-field"
                         label="Value"
+                        name="value"
                         type="number"
                         variant="standard"
                         placeholder="Filter value"
@@ -60,11 +49,11 @@ const List = ({ fields }) => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        value={filterValue}
-                        onChange={handleFilterValueChange}
+                        value={value}
+                        onChange={handleFilterChange}
                         disabled={FilterMenuHelper.isOperatorRequireCompareValue(
                             FilterMenuHelper.OPERATORS,
-                            filterOperator
+                            operator
                         )}
                     />
                 </FormControl>
@@ -73,7 +62,7 @@ const List = ({ fields }) => {
     );
 };
 
-const FilterMenu = ({ fields }) => {
+const FilterMenu = ({ fields, selected, handleFilterModelChange }) => {
     const {
         filterMenuId,
         filterMenuAnchorEl,
@@ -81,6 +70,15 @@ const FilterMenu = ({ fields }) => {
         handleFilterMenuBtnClick,
         closeFilterMenu
     } = useControls();
+
+    const handleFilterChange = ({ target: { value, name } }) => handleFilterModelChange(
+        { ...selected, [name]: value }
+    );
+
+    const onResetBtnClick = () => {
+        handleFilterModelChange({ ...selected, value: null });
+        closeFilterMenu();
+    }
 
     return (
         <ToggleMenu
@@ -93,7 +91,12 @@ const FilterMenu = ({ fields }) => {
             open={filterMenuOpen}
             anchorEl={filterMenuAnchorEl}
         >
-            <List fields={fields}/>
+            <List
+                fields={fields}
+                selected={selected}
+                handleFilterChange={handleFilterChange}
+                onResetBtnClick={onResetBtnClick}
+            />
         </ToggleMenu>
     );
 };

@@ -25,7 +25,7 @@ const ListItem = ({ order, name, selected, onClick }) => {
     );
 }
 
-const List = ({ fields, selected, onSortModelChange }) => {
+const List = ({ fields, selected, handleSortModelChange }) => {
     const menuItems = _.map(fields, (field, index) => (
         <Fragment key={ComponentsHelper.generateKey('MenuList')}>
             <MenuList>
@@ -34,7 +34,7 @@ const List = ({ fields, selected, onSortModelChange }) => {
                         key={ComponentsHelper.generateKey('MenuItem')}
                         order={order}
                         name={field}
-                        onClick={() => onSortModelChange([{ field, sort: order }])}
+                        onClick={() => handleSortModelChange([{ field, sort: order }])}
                         selected={_.isEqual(selected, { field, sort: order })}
                     />
                 ))}

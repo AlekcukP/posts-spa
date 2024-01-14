@@ -24,8 +24,9 @@ class FilterMenuHelper {
         return _.map(fields, field => ({ name: _.capitalize(field), value: field }));
     }
 
-    static isOperatorRequireCompareValue(operators, rule) {
-        return _.includes([operators.isEmpty, operators.isNotEmpty], rule);
+    static isOperatorRequireCompareValue(operator) {
+        return FilterMenuHelper.OPERATORS.isEmpty !== operator &&
+            FilterMenuHelper.OPERATORS.isNotEmpty !== operator;
     }
 }
 

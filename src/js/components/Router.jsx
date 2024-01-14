@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './dashboard/Dashboard';
 import Home from './Home';
 import UsersContent from './dashboard/UsersContent';
@@ -9,7 +9,7 @@ import NotFound from './NotFound';
 
 const Router = () => {
     return (
-        <HashRouter>
+        <BrowserRouter>
             <Routes>
                 <Route path='/' exact element={<Home />} />
 
@@ -26,7 +26,7 @@ const Router = () => {
 
                 <Route path='*' element={<NotFound />} />
             </Routes>
-        </HashRouter>
+        </BrowserRouter>
     );
 }
 

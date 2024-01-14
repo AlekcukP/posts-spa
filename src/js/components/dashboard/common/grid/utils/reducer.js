@@ -16,6 +16,13 @@ export default function reducer(state, action) {
             };
         }
 
+        case 'filter_model_change': {
+            return {
+                ...state,
+                filter: { filterModel: { items: [...action.filterModel.items] } }
+            };
+        };
+
         default:
             throw Error('Unknown action: ' + action.type);
     }
