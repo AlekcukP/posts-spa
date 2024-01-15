@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin } = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 require('dotenv').config();
 
 const IS_PROD = process.env.MODE === process.env.PROD_MODE;
@@ -15,7 +16,7 @@ module.exports = {
         warnings: false,
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         modules: ['node_modules', './src'],
     },
     devServer: {
@@ -65,17 +66,18 @@ module.exports = {
         }),
         new DefinePlugin({
             API_URL: JSON.stringify(API_URL)
-        })
+        }),
+        new CleanWebpackPlugin(),
     ],
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                        presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
                     },
                 },
             },
